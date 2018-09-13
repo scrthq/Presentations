@@ -21,6 +21,7 @@
             Role = "web"
         }
         TemplateName = "Web-Tier-Core-DEV.yml"
+        UserDataFile = "StdUserData.ps1"
     }
     Stg = @{
         # Let's bump up the staging autoscaling group a bit to get us closer to production
@@ -44,6 +45,7 @@
             Role = "web"
         }
         TemplateName = "Web-Tier-Core-STG.yml"
+        UserDataFile = "StdUserData.ps1"
     }
     Prd = @{
         AMI = "ami-f582359e"
@@ -66,5 +68,6 @@
             Role = "web"
         }
         TemplateName = "Web-Tier-Core-PRD.yml"
+        UserDataFile = "StdUserData.ps1"
     }
 }

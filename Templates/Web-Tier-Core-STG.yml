@@ -1,0 +1,242 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Core Web Tier STAGING
+Resources:
+  StdS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: MyBucket_Stg
+      Tags:
+        - Key: Division
+          Value: infrastructure
+        - Key: Name
+          Value: cf-web-s-1
+        - Key: Department
+          Value: technology
+        - Key: Environment
+          Value: staging
+        - Key: Application
+          Value: MyCoolWebApp
+        - Key: Role
+          Value: web
+      AccessControl: BucketOwnerFullControl
+  StdEC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy
+      Policies:
+        - PolicyName: DefaultEC2Policy
+          PolicyDocument:
+            Statement:
+              - Resource:
+                  - '*'
+                Effect: Allow
+                Action:
+                  - logs:CreateLogStream
+                  - logs:DescribeLogGroups
+                  - logs:DescribeLogStreams
+                  - logs:PutLogEvents
+              - Condition:
+                  StringEquals:
+                    ec2:ResourceTag/aws:cloudformation:stack-name: web-tier-core-stg
+                Resource:
+                  - '*'
+                Effect: Allow
+                Action:
+                  - ec2:CreateTags
+                  - ec2:DeleteTags
+                  - ec2:DescribeTags
+              - Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - MyBucket_Stg
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - MyBucket_Stg
+                      - /*
+                Effect: Allow
+                Action:
+                  - s3:Get*
+                  - s3:List*
+      AssumeRolePolicyDocument:
+        Statement:
+          - Principal:
+              Service:
+                - ec2.amazonaws.com
+            Effect: Allow
+            Action:
+              - sts:AssumeRole
+      Path: /
+  StdEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref 'StdEC2Role'
+  StdS3Policy:
+    Type: AWS::IAM::Policy
+    Properties:
+      Roles:
+        - !Ref 'StdEC2Role'
+      PolicyName: StdS3Policy
+      PolicyDocument:
+        Statement:
+          - Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - MyBucket_Stg
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - MyBucket_Stg
+                  - /*
+            Effect: Allow
+            Action:
+              - s3:DeleteObject
+              - s3:GetObject
+              - s3:ListBucket
+              - s3:PutObject
+  StdElasticLoadBalancer:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      Tags:
+        - Key: Division
+          Value: infrastructure
+        - Key: Name
+          Value: cf-web-s-1
+        - Key: Department
+          Value: technology
+        - Key: Environment
+          Value: staging
+        - Key: Application
+          Value: MyCoolWebApp
+        - Key: Role
+          Value: web
+      CrossZone: true
+      Listeners:
+        - LoadBalancerPort: '80'
+          InstancePort: '80'
+          InstanceProtocol: HTTP
+          Protocol: HTTP
+        - LoadBalancerPort: '443'
+          InstancePort: '443'
+          InstanceProtocol: TCP
+          Protocol: TCP
+      Scheme: Internal
+      LoadBalancerName: !Join
+        - '-'
+        - - web-tier-core
+          - stg
+      SecurityGroups:
+        - !ImportValue 'webserver-sec-group'
+      Subnets:
+        - !ImportValue 'subnet-web-front-end-us-west-2a'
+        - !ImportValue 'subnet-web-front-end-us-west-2b'
+      ConnectionDrainingPolicy:
+        Enabled: true
+        Timeout: 300
+      HealthCheck:
+        Target: HTTPS:443/healthcheck.htm
+        HealthyThreshold: '2'
+        UnhealthyThreshold: '2'
+        Interval: '12'
+        Timeout: '10'
+  StdLaunchConfiguration:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: ami-f582359e
+      SecurityGroups:
+        - !ImportValue 'monitorpatching-sec-group'
+        - !ImportValue 'windowsmanagement-sec-group'
+        - !ImportValue 'ad-sec-group'
+        - !ImportValue 'webserver-sec-group'
+      UserData: !Base64
+        Fn::Join:
+          - ''
+          - - <powershell>
+            - param(
+            - "\t$stackname = 'web-tier-core',"
+            - "\t$region = 'us-west-2'"
+            - )
+            - $flagsDir = "C:\Flags"
+            - $cfnSignalFlag = Join-Path $flagsDir "cfn-signal.flag"
+            - if (!(Test-Path $flagsDir)) {
+            - "\tNew-Item -Path $flagsDir -ItemType Directory"
+            - '}'
+            - $name = "WIN-$((Get-NetAdapter | Select-Object -First 1).MacAddress.Replace('-','').SubString(1,11))"
+            - if ($env:COMPUTERNAME -ne $name) {
+            - "\tRename-Computer $name -Force -Restart"
+            - '}'
+            - elseif ($env:USERDOMAIN -eq $env:COMPUTERNAME) {
+            - '}'
+            - elseif (!(Test-Path $cfnSignalFlag)) {
+            - "\t& cfn-signal.exe -e 0 --resource AutoScalingGroup --stack $stackname\
+              \ --region $region"
+            - "\tNew-Item -Path $cfnSignalFlag -ItemType File"
+            - '}'
+            - </powershell>
+      IamInstanceProfile: !Ref 'StdEC2InstanceProfile'
+      InstanceType: t2.medium
+      KeyName: WindowsStg
+  StdAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      NotificationConfigurations: []
+      LoadBalancerNames:
+        - !Ref 'StdElasticLoadBalancer'
+      MinSize: '1'
+      MaxSize: '2'
+      AvailabilityZones:
+        - us-west-2a
+        - us-west-2b
+      VPCZoneIdentifier:
+        - !ImportValue 'subnet-web-front-end-us-west-2a'
+        - !ImportValue 'subnet-web-front-end-us-west-2b'
+      DesiredCapacity: '2'
+      LaunchConfigurationName: !Ref 'StdLaunchConfiguration'
+      Tags:
+        - Key: Division
+          Value: infrastructure
+          PropagateAtLaunch: true
+        - Key: Name
+          Value: cf-web-s-1
+          PropagateAtLaunch: true
+        - Key: Department
+          Value: technology
+          PropagateAtLaunch: true
+        - Key: Environment
+          Value: staging
+          PropagateAtLaunch: true
+        - Key: Application
+          Value: MyCoolWebApp
+          PropagateAtLaunch: true
+        - Key: Role
+          Value: web
+          PropagateAtLaunch: true
+      HealthCheckType: EC2
+    CreationPolicy:
+      AutoScalingCreationPolicy:
+        MinSuccessfulInstancesPercent: '100'
+      ResourceSignal:
+        Timeout: PT1H
+        Count: '2'
+    UpdatePolicy:
+      AutoScalingRollingUpdate:
+        MaxBatchSize: '1'
+        SuspendProcesses:
+          - HealthCheck
+          - ReplaceUnhealthy
+          - AZRebalance
+          - AlarmNotification
+          - ScheduledActions
+        PauseTime: PT1H
+        MinInstancesInService: '1'
+        WaitOnResourceSignals: 'true'
+  StdElbDnsEntry:
+    Type: Custom::DNSEntry
+    Properties:
+      RecordData: !GetAtt 'StdElasticLoadBalancer.DNSName'
+      RecordName: web-tier-core-stg
+      ServiceToken: !ImportValue 'dns-entry-sns-arn'
