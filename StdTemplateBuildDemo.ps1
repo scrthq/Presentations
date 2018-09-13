@@ -16,5 +16,5 @@ $userData = Add-UserData -File "$PSScriptRoot\UserData\$($conf.UserDataFile)" -U
 } # Create UserData from existing PowerShell script file, replacing container values per the supplied hashtable
 . "$PSScriptRoot\StdResources\StdAutoScalingGroup.ps1" -Tags $stackTags -BucketName $conf.S3BucketName -UserData $userData | ForEach-Object { $global:template.AddResource($_) } # Add ASG, ELB, etc to template
 
-$global:template.ToYAML("$PSScriptRoot\Templates\$($conf.TemplateName)",$true) # Export template to YAML with cfn-flip
-$global:template.Validate('default',$true) # Validate the template's syntax using the AWS .NET SDK
+$global:template.ToYAML("$PSScriptRoot\Templates\$($conf.TemplateName)",$true) # Export template to YAML via cfn-flip
+$global:template.Validate('default',$true) # Validate the template's syntax using the AWS .NET SDK using credentials from the default profile on the AWS Shared Credentials file (~\.aws\credentials)
