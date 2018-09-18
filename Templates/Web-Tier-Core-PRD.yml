@@ -6,8 +6,6 @@ Resources:
     Properties:
       BucketName: MyBucket_Prd
       Tags:
-        - Key: Division
-          Value: infrastructure
         - Key: Name
           Value: cf-web-1
         - Key: Department
@@ -16,9 +14,90 @@ Resources:
           Value: production
         - Key: Application
           Value: MyCoolWebApp
+        - Key: Division
+          Value: infrastructure
         - Key: Role
           Value: web
       AccessControl: BucketOwnerFullControl
+  StdEC2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      Policies:
+        - PolicyName: DefaultEC2Policy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Resource:
+                  - '*'
+                Action:
+                  - logs:CreateLogStream
+                  - logs:DescribeLogGroups
+                  - logs:DescribeLogStreams
+                  - logs:PutLogEvents
+              - Effect: Allow
+                Condition:
+                  StringEquals:
+                    ec2:ResourceTag/aws:cloudformation:stack-name: web-tier-core-prd
+                Resource:
+                  - '*'
+                Action:
+                  - ec2:CreateTags
+                  - ec2:DeleteTags
+                  - ec2:DescribeTags
+              - Effect: Allow
+                Resource:
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - MyBucket_Prd
+                  - !Join
+                    - ''
+                    - - 'arn:aws:s3:::'
+                      - MyBucket_Prd
+                      - /*
+                Action:
+                  - s3:Get*
+                  - s3:List*
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy
+  StdEC2InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref 'StdEC2Role'
+  StdS3Policy:
+    Type: AWS::IAM::Policy
+    Properties:
+      Roles:
+        - !Ref 'StdEC2Role'
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Resource:
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - MyBucket_Prd
+              - !Join
+                - ''
+                - - 'arn:aws:s3:::'
+                  - MyBucket_Prd
+                  - /*
+            Action:
+              - s3:DeleteObject
+              - s3:GetObject
+              - s3:ListBucket
+              - s3:PutObject
+      PolicyName: StdS3Policy
   StdPRDMonitoringTopic:
     Type: AWS::SNS::Topic
     Properties:
@@ -40,7 +119,6 @@ Resources:
   StdPRDMonitoringHostTemplate:
     Type: Custom::MonitoringHostTemplate
     Properties:
-      AccountId: !Ref 'AWS::AccountId'
       HostTemplateName: web-tier-core-prd
       ServiceToken: !Join
         - ''
@@ -49,92 +127,27 @@ Resources:
           - ':'
           - !Ref 'AWS::AccountId'
           - MonitoringHostTemplateTopic
+      AccountId: !Ref 'AWS::AccountId'
       HostTemplateDescription: Host template for web-tier-core-prd stack.
-  StdEC2Role:
-    Type: AWS::IAM::Role
-    Properties:
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy
-      Policies:
-        - PolicyName: DefaultEC2Policy
-          PolicyDocument:
-            Statement:
-              - Resource:
-                  - '*'
-                Effect: Allow
-                Action:
-                  - logs:CreateLogStream
-                  - logs:DescribeLogGroups
-                  - logs:DescribeLogStreams
-                  - logs:PutLogEvents
-              - Condition:
-                  StringEquals:
-                    ec2:ResourceTag/aws:cloudformation:stack-name: web-tier-core-prd
-                Resource:
-                  - '*'
-                Effect: Allow
-                Action:
-                  - ec2:CreateTags
-                  - ec2:DeleteTags
-                  - ec2:DescribeTags
-              - Resource:
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - MyBucket_Prd
-                  - !Join
-                    - ''
-                    - - 'arn:aws:s3:::'
-                      - MyBucket_Prd
-                      - /*
-                Effect: Allow
-                Action:
-                  - s3:Get*
-                  - s3:List*
-      AssumeRolePolicyDocument:
-        Statement:
-          - Principal:
-              Service:
-                - ec2.amazonaws.com
-            Effect: Allow
-            Action:
-              - sts:AssumeRole
-      Path: /
-  StdEC2InstanceProfile:
-    Type: AWS::IAM::InstanceProfile
-    Properties:
-      Roles:
-        - !Ref 'StdEC2Role'
-  StdS3Policy:
-    Type: AWS::IAM::Policy
-    Properties:
-      Roles:
-        - !Ref 'StdEC2Role'
-      PolicyName: StdS3Policy
-      PolicyDocument:
-        Statement:
-          - Resource:
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - MyBucket_Prd
-              - !Join
-                - ''
-                - - 'arn:aws:s3:::'
-                  - MyBucket_Prd
-                  - /*
-            Effect: Allow
-            Action:
-              - s3:DeleteObject
-              - s3:GetObject
-              - s3:ListBucket
-              - s3:PutObject
   StdElasticLoadBalancer:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
+      HealthCheck:
+        Target: HTTPS:443/healthcheck.htm
+        HealthyThreshold: '2'
+        UnhealthyThreshold: '2'
+        Interval: '12'
+        Timeout: '10'
+      SecurityGroups:
+        - !ImportValue 'webserver-sec-group'
+      Subnets:
+        - !ImportValue 'subnet-web-front-end-us-west-2a'
+        - !ImportValue 'subnet-web-front-end-us-west-2b'
+      LoadBalancerName: !Join
+        - '-'
+        - - web-tier-core
+          - prd
       Tags:
-        - Key: Division
-          Value: infrastructure
         - Key: Name
           Value: cf-web-1
         - Key: Department
@@ -143,9 +156,11 @@ Resources:
           Value: production
         - Key: Application
           Value: MyCoolWebApp
+        - Key: Division
+          Value: infrastructure
         - Key: Role
           Value: web
-      CrossZone: true
+      Scheme: Internal
       Listeners:
         - LoadBalancerPort: '80'
           InstancePort: '80'
@@ -155,34 +170,13 @@ Resources:
           InstancePort: '443'
           InstanceProtocol: TCP
           Protocol: TCP
-      Scheme: Internal
-      LoadBalancerName: !Join
-        - '-'
-        - - web-tier-core
-          - prd
-      SecurityGroups:
-        - !ImportValue 'webserver-sec-group'
-      Subnets:
-        - !ImportValue 'subnet-web-front-end-us-west-2a'
-        - !ImportValue 'subnet-web-front-end-us-west-2b'
+      CrossZone: true
       ConnectionDrainingPolicy:
         Enabled: true
         Timeout: 300
-      HealthCheck:
-        Target: HTTPS:443/healthcheck.htm
-        HealthyThreshold: '2'
-        UnhealthyThreshold: '2'
-        Interval: '12'
-        Timeout: '10'
   StdLaunchConfiguration:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
-      ImageId: ami-f582359e
-      SecurityGroups:
-        - !ImportValue 'monitorpatching-sec-group'
-        - !ImportValue 'windowsmanagement-sec-group'
-        - !ImportValue 'ad-sec-group'
-        - !ImportValue 'webserver-sec-group'
       UserData: !Base64
         Fn::Join:
           - ''
@@ -209,11 +203,20 @@ Resources:
             - '}'
             - </powershell>
       IamInstanceProfile: !Ref 'StdEC2InstanceProfile'
-      InstanceType: t2.large
+      ImageId: ami-f582359e
+      SecurityGroups:
+        - !ImportValue 'monitorpatching-sec-group'
+        - !ImportValue 'windowsmanagement-sec-group'
+        - !ImportValue 'ad-sec-group'
+        - !ImportValue 'webserver-sec-group'
       KeyName: WindowsPrd
+      InstanceType: t2.large
   StdAutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
+      AvailabilityZones:
+        - us-west-2a
+        - us-west-2b
       NotificationConfigurations:
         - NotificationTypes:
             - autoscaling:EC2_INSTANCE_LAUNCH
@@ -223,20 +226,15 @@ Resources:
           TopicARN: !Ref 'StdPRDMonitoringTopic'
       LoadBalancerNames:
         - !Ref 'StdElasticLoadBalancer'
-      MinSize: '2'
+      HealthCheckType: EC2
+      DesiredCapacity: '4'
+      LaunchConfigurationName: !Ref 'StdLaunchConfiguration'
       MaxSize: '4'
-      AvailabilityZones:
-        - us-west-2a
-        - us-west-2b
       VPCZoneIdentifier:
         - !ImportValue 'subnet-web-front-end-us-west-2a'
         - !ImportValue 'subnet-web-front-end-us-west-2b'
-      DesiredCapacity: '4'
-      LaunchConfigurationName: !Ref 'StdLaunchConfiguration'
+      MinSize: '2'
       Tags:
-        - Key: Division
-          Value: infrastructure
-          PropagateAtLaunch: true
         - Key: Name
           Value: cf-web-1
           PropagateAtLaunch: true
@@ -249,18 +247,21 @@ Resources:
         - Key: Application
           Value: MyCoolWebApp
           PropagateAtLaunch: true
+        - Key: Division
+          Value: infrastructure
+          PropagateAtLaunch: true
         - Key: Role
           Value: web
           PropagateAtLaunch: true
-      HealthCheckType: EC2
     CreationPolicy:
       AutoScalingCreationPolicy:
         MinSuccessfulInstancesPercent: '100'
       ResourceSignal:
-        Timeout: PT1H
         Count: '4'
+        Timeout: PT1H
     UpdatePolicy:
       AutoScalingRollingUpdate:
+        MinInstancesInService: '2'
         MaxBatchSize: '2'
         SuspendProcesses:
           - HealthCheck
@@ -268,12 +269,11 @@ Resources:
           - AZRebalance
           - AlarmNotification
           - ScheduledActions
-        PauseTime: PT1H
-        MinInstancesInService: '2'
         WaitOnResourceSignals: 'true'
+        PauseTime: PT1H
   StdElbDnsEntry:
     Type: Custom::DNSEntry
     Properties:
-      RecordData: !GetAtt 'StdElasticLoadBalancer.DNSName'
       RecordName: web-tier-core-prd
+      RecordData: !GetAtt 'StdElasticLoadBalancer.DNSName'
       ServiceToken: !ImportValue 'dns-entry-sns-arn'
