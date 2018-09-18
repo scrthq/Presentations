@@ -21,3 +21,5 @@ $userData = Add-UserData -File "$PSScriptRoot\UserData\$($conf.UserDataFile)" -U
 $global:template.ToYAML("$PSScriptRoot\Templates\$($conf.TemplateName)",$true) # Export template to YAML via cfn-flip
 
 $global:template.Validate('default',$true) # Validate the template's syntax using the AWS .NET SDK using credentials from the 'default' profile on the AWS Shared Credentials file (~\.aws\credentials)
+
+New-VSStack -TemplateBody $template -StackName "my-sql-express-stack" -Confirm:$false
