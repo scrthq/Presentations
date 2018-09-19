@@ -4,4 +4,4 @@ highlight : atom-one-dark
 code-line-numbers: true
 theme-override : assets/css/PITCHME.css
 layout : center
-mousewheel : true
+mousewheel : false
