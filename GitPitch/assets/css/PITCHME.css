@@ -1,0 +1,99 @@
+.reveal .slide-background {
+    background-color: #222222;
+}
+
+.centered {
+    text-align: center;
+}
+
+.reveal .controls {
+    color: #899265;
+}
+
+.reveal a {
+    color: #899265;
+}
+
+.reveal a:hover {
+    color: #899265;
+}
+
+.reveal a:visited {
+    color: #899265;
+}
+
+.reveal ul li {
+    margin: 0 0 8px 0;
+}
+
+.reveal li {
+    font-size: .9em;
+}
+
+.reveal h3 {
+    font-size: 1.45em;
+}
+
+.reveal blockquote {
+    width: 95%;
+}
+
+.reveal section img {
+  border: 0;
+  box-shadow: none;
+}
+
+.reveal ol {
+  list-style-position: inside;
+}
+
+.reveal ol li {
+  margin: 0 0 20px 0 !important;
+}
+
+.reveal ul {
+  list-style-type: square;
+  list-style-position: inside !important;
+}
+
+.reveal ul li {
+   margin:0 0 10px 0;
+}
+
+.reveal ul.shrink-items li {
+   margin:0 0 10px 0;
+   font-size: 0.85em;
+}
+
+.reveal ul.many-items li {
+   margin:0 0 8px 0;
+   font-size: 0.6em;
+}
+
+.reveal ul.long-items li {
+   font-size: 0.75em;
+   margin:0 0 30px 0;
+}
+
+.reveal ul.image-credit-items li {
+   margin:0 0 8px 0;
+   font-size: 0.4em;
+}
+
+div.activity-details {
+  font-size: 0.9em;
+  margin-bottom: 30px;
+}
+
+.reveal table {
+  font-size: 0.75em;
+}
+
+.reveal table th, .reveal table td {
+  padding: 1em 0.5em 1em 0.5em;
+}
+
+.footnote {
+  color: gray;
+  font-size: 0.5em !important;
+}

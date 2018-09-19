@@ -1,7 +1,11 @@
-### @color[orange](Building Dynamic CloudFormation Templates with VaporShell)
+---?color=#222222
 
-> @size[0.5em](_Nate Ferrell | @scrthq - Systems & DevOps Engineer_)
+### Building Dynamic CloudFormation Templates with VaporShell<br><br>
+##### Nate Ferrell<br>Systems & DevOps Engineer
+###### [ferrell.io](https://ferrell.io/)<br>[@fa[twitter]@scrthq](https://twitter.com/scrthq)<br>[@fa[github]@scrthq](https://github.com/scrthq)
 
----
 
 ---?code=StdSqlExpressRDS.ps1&lang=powershell
+@[1-2](Init Spark cluster data source)
+@[41-53](Build RDD[AWSTask] from source)
+@[57-62](Delegate RDD[AWSTask] to AWS Lambda)
