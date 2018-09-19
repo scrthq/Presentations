@@ -1,4 +1,4 @@
 theme : night
-highlight : ir-black
+highlight : monokai-sublime
 theme-override : assets/css/PITCHME.css
 layout : center-left
