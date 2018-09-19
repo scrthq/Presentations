@@ -28,7 +28,8 @@ $userData = Add-UserData -File "$PSScriptRoot\UserData\$($conf.UserDataFile)" -U
     '#{region}' = $conf.AvailabilityZones[0] -replace ".$"
 }
 
-. "$PSScriptRoot\StdResources\StdAutoScalingGroup.ps1" -Tags $stackTags -BucketName $conf.S3BucketName -UserData $userData | ForEach-Object {
+. "$PSScriptRoot\StdResources\StdAutoScalingGroup.ps1" -Tags $stackTags -BucketName $conf.S3BucketName -UserData $userData |
+ForEach-Object {
     $global:template.AddResource($_)
 }
 

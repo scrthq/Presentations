@@ -55,13 +55,13 @@ We'll be building a CloudFormation stack containing the following resources:
 
 ---?color=#282C34
 
-### What are we building today?
+### Anything else?
 
 
 Deploying to production? Let's add these as well:
 
 @ul
-- AutoScaling Group Notification Config to notify when the ASG scales up or down
+- AutoScaling Group Notification Config to notify via SNS when the ASG scales up or down
 - SNS Topic to push the ASG events to SQS so that production monitoring can add or remove hosts as needed
 @ulend
 
