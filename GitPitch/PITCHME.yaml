@@ -1,4 +1,4 @@
 theme : night
-highlight : agate
+highlight : atom-one-dark
 theme-override : assets/css/PITCHME.css
 layout : center-left
