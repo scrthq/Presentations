@@ -6,7 +6,7 @@ $template = Initialize-Vaporshell @initializeVaporshellSplat
 
 $newVaporResourceSplat = @{
     Properties = @{
-        ServiceToken = (Add-FnJoin -Delimiter "" -ListOfValues @(
+        ServiceToken = (Add-FnJoin "" @(
             'arn:aws:lambda:'
             (Add-FnRef $_AWSRegion)
             ':'
@@ -76,7 +76,7 @@ $template.Validate('default')
 $newVSStackSplat = @{
     TemplateBody = $template
     StackName = "my-sql-express-stack"
-    ProfileName = 'dev'
+    ProfileName = 'default'
     WhatIf = $true
 }
 New-VSStack @newVSStackSplat
