@@ -65,11 +65,7 @@ Deploying to production? Let's add these as well:
 - SNS Topic to push the ASG events to SQS so that production monitoring can add or remove hosts as needed
 @ulend
 
----?code=StdWebASGStack.ps1&lang=powershell&color=#282C34
-
-@snap[north]
-<h3>The Stack</h3>
-@snapend
+---?code=StdWebASGStack.ps1&lang=powershell&color=#282C34&title=The Stack
 
 @[1-10](Parameterize the script so we can set config file path and the environment we are deploying to)
 @[11](Import the VaporShell module)
@@ -78,14 +74,14 @@ Deploying to production? Let's add these as well:
 @[17-19](Compile the tags from the config into an array of CloudFormation-formatted Tags)
 @[21-24](Add an S3 bucket for the front-end hosts to access resources from using a standard script)
 @[26-29](Add our UserData for our Launch Configuration using the `Add-UserData` helper function, replacing strings in the script contents using the supplied hashtable)
-@[31-33](Add in the components necessary for our web stack, including an ASG, ELB, Launch Config and EC2 Role...)
-@[31-33](If we're deploying to production, we'll also add in our production monitoring resources)
-@[35](We're going to export the template to file for backup purposes, so let's save it as YAML using the template name provided in the configuration by passing the file path to the `ToYAML` method)
-@[37-49](Finally, let's validate the template and deploy it)
-@[37-49](This time, we'll add some more error handling around it so we don't deploy an invalid template that could just fail)
-@[40](We'll check if the stack exists...)
-@[41](If it does, we'll create a Change Set for that stack...)
-@[44](Otherwise we'll deploy it as a new stack entirely)
+@[31-34](Add in the components necessary for our web stack, including an ASG, ELB, Launch Config and EC2 Role...)
+@[31-34](If we're deploying to production, we'll also add in our production monitoring resources)
+@[36](We're going to export the template to file for backup purposes, so let's save it as YAML using the template name provided in the configuration by passing the file path to the `ToYAML` method)
+@[38-50](Finally, let's validate the template and deploy it)
+@[38-50](This time, we'll add some more error handling around it so we don't deploy an invalid template that could just fail)
+@[41](We'll check if the stack exists...)
+@[42](If it does, we'll create a Change Set for that stack...)
+@[45](Otherwise we'll deploy it as a new stack entirely)
 
 ---?code=StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 Bucket script
 
