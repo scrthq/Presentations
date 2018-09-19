@@ -1,7 +1,7 @@
 ---?color=#282C34
 
 @snap[west]
-<h3>Building Dynamic CloudFormation Templates with VaporShell</h3>
+<h3>Building Dynamic CloudFormation Templates with <a href='https://vaporshell.io/'>VaporShell</a></h3>
 <hr>
 <h4>Nate Ferrell<br><i>Systems & DevOps Engineer</i></h4>
 <h5>[@fa[pencil] ferrell.io](https://ferrell.io/)<br>[@fa[twitter] @scrthq](https://twitter.com/scrthq)<br>[@fa[github] @scrthq](https://github.com/scrthq)</h5>
@@ -68,6 +68,11 @@ We'll be building 2 CloudFormation templates:
 @[15](Initialize a template object at the global scope so it's also accessible from other scripts)
 @[17](Create a global array to house notification configs. This will be filled if environment is production)
 @[24-27](Add an S3 bucket for the front-end hosts to access resources from using a standard script)
-@[29-32](Add our UserData for our Launch Configuration using the `Add-UserData` helper function)
+@[29-32](Add our UserData for our Launch Configuration using the `Add-UserData` helper function, replacing strings in the script contents using the supplied hashtable)
+@[34-36](Add in the components necessary for our web stack, including an ASG, ELB, Launch Config and EC2 Role...)
+@[34-36](If we're deploying to production, we'll also add in our production monitoring resources)
+@[38](We're going to want to export the template to file, so let's save it as YAML using the template name provided in the configuration)
 
-+++?code=StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 bucket script
+
+
+---?code=StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 bucket script
