@@ -40,6 +40,9 @@ We'll be building 2 CloudFormation templates:
 @olend
 
 ---?code=StdSqlExpressRDS.ps1&lang=powershell&color=#282C34&title=Creating a single-script stack
+
+_[Link to script in GitHub](https://github.com/scrthq/VaporShell-DynamicTemplateDemo/blob/master/StdSqlExpressRDS.ps1)_
+
 @[1-6](Parameterize the script so we can set the environment we are deploying to)
 @[7](Import the VaporShell module)
 @[8-11](Initialize the template object with a useful description for the stack)
@@ -58,5 +61,3 @@ We'll be building 2 CloudFormation templates:
 @[86-93](DEMO ONLY! Don't ever output something sensitive like this in real life! ☠️)
 @[95-97](Cast the template to YAML, validate the template syntax using the AWS CloudFormation SDK then pause to inspect it in the console)
 @[99-105](Finally, deploy the template as a new CloudFormation stack!)
-
-_[Link to script in GitHub](https://github.com/scrthq/VaporShell-DynamicTemplateDemo/blob/master/StdSqlExpressRDS.ps1)_
