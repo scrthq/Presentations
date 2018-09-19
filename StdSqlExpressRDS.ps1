@@ -1,5 +1,8 @@
 Import-Module VaporShell
-$template = Initialize-Vaporshell -Description "My SQL Server RDS stack"
+$initializeVaporshellSplat = @{
+    Description = "My SQL Server RDS stack"
+}
+$template = Initialize-Vaporshell @initializeVaporshellSplat
 
 $newVaporResourceSplat = @{
     Properties = @{
@@ -18,18 +21,18 @@ $newVaporResourceSplat = @{
 $customResource = New-VaporResource @newVaporResourceSplat
 $secretValue = Add-FnGetAtt $customResource -AttributeName 'Secret'
 
-$addVSEC2SecurityGroupIngressSplat = @{
+$addVSEC2SGIngressParams = @{
     IpProtocol = 'tcp'
     ToPort = '1433'
     FromPort = '1433'
     CidrIp = "$(Invoke-RestMethod http://ipinfo.io/json |
                 Select-Object -ExpandProperty IP)/32"
 }
-$securityGroupIngress = Add-VSEC2SecurityGroupIngress @addVSEC2SecurityGroupIngressSplat
+$sgIngress = Add-VSEC2SecurityGroupIngress @addVSEC2SGIngressParams
 
 $newVSEC2SecurityGroupSplat = @{
     GroupDescription = 'Port 1433 access to RDS from local only'
-    SecurityGroupIngress = $securityGroupIngress
+    SecurityGroupIngress = $sgIngress
     LogicalId = 'RDSSecurityGroup'
 }
 $ec2SecurityGroup = New-VSEC2SecurityGroup @newVSEC2SecurityGroupSplat
