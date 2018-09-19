@@ -72,7 +72,25 @@ We'll be building 2 CloudFormation templates:
 @[31-33](Add in the components necessary for our web stack, including an ASG, ELB, Launch Config and EC2 Role...)
 @[31-33](If we're deploying to production, we'll also add in our production monitoring resources)
 @[35](We're going to export the template to file for backup purposes, so let's save it as YAML using the template name provided in the configuration by passing the file path to the `ToYAML` method)
+@[37-49](Finally, let's validate the template and deploy it)
+@[37-49](This time, we'll add some more error handling around it so we don't deploy an invalid template that could just fail)
+@[40](We'll check if the stack exists...)
+@[41](If it does, we'll create a Change Set for that stack...)
+@[44](Otherwise we'll deploy it as a new stack entirely)
 
+---?code=StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 Bucket script
 
+Simple S3 bucket script without any bells or whistles. Usually all you'll need.
 
----?code=StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 bucket script
+---?code=StdResources/StdAutoScalingGroup.ps1&lang=powershell&color=#282C34&title=The AutoScalingGroup script
+
+This one is a bit more complex due to how many additional resources are needed for a standard AutoScalingGroup
+
+---?color=#282C34
+
+@snap[west]
+<h3>Thank you for your time!</h3>
+<hr>
+<h4>Nate Ferrell<br><i>Systems & DevOps Engineer</i></h4>
+<h5>[@fa[pencil] ferrell.io](https://ferrell.io/)<br>[@fa[twitter] @scrthq](https://twitter.com/scrthq)<br>[@fa[github] @scrthq](https://github.com/scrthq)<br>[@fa[slack] @scrthq](http://slack.poshcode.org/)</h5>
+@snapend

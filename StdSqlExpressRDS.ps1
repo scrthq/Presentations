@@ -100,6 +100,5 @@ $newVSStackSplat = @{
     TemplateBody = $template
     StackName = "my-sql-express-stack"
     ProfileName = $Environment
-    WhatIf = $true
 }
 New-VSStack @newVSStackSplat

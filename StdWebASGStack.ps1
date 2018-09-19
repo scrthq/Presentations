@@ -38,10 +38,10 @@ try {
     $global:template.Validate($conf.Environment)
     try {
         Get-VSStack -StackId $conf.StackName -ProfileName $conf.Environment -ErrorAction Stop
-        New-VSChangeSet -TemplateBody $template -StackName $conf.StackName -ChangeSetName "$($conf.StackName)_$(Get-Date -Format "yyyy_MM_dd")" -ProfileName $conf.Environment -WhatIf
+        New-VSChangeSet -TemplateBody $template -StackName $conf.StackName -ChangeSetName "$($conf.StackName)_$(Get-Date -Format "yyyy_MM_dd")" -ProfileName $conf.Environment
     }
     catch {
-        New-VSStack -TemplateBody $template -StackName $conf.StackName -ProfileName $conf.Environment -WhatIf
+        New-VSStack -TemplateBody $template -StackName $conf.StackName -ProfileName $conf.Environment
     }
 }
 catch {
