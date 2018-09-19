@@ -36,6 +36,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - No longer having to work with JSON or YAML 😃
 @ulend
 
+<!--
 ---?color=#282C34
 
 ### What are we building today?
@@ -46,6 +47,7 @@ We'll be building 2 CloudFormation templates:
 - A single-script RDS stack useful for something purpose-built
 - A generic web stack using shared, standardized resources that we'll fill out using a configuration file
 @olend
+
 
 ---?code=StdSqlExpressRDS.ps1&lang=powershell&color=#282C34&title=Creating a single-script stack
 
@@ -67,8 +69,37 @@ We'll be building 2 CloudFormation templates:
 @[86-93](DEMO ONLY! Don't ever output something sensitive like this in real life! ☠️)
 @[95-97](Cast the template to YAML, validate the template syntax using the AWS CloudFormation SDK then pause to inspect it in the console)
 @[99-105](Finally, deploy the template as a new CloudFormation stack!)
+-->
 
----?code=StdWebASGStack.ps1&lang=powershell&color=#282C34&title=Creating a stack using standardized resources and a configuration file
+---?color=#282C34
+
+### What are we building today?
+
+We'll be building a CloudFormation stack using an environment specific configuration file containing the following resources:
+
+@ul
+- S3 Bucket
+- S3 Bucket Policy
+- EC2 Role
+- Instance Profile
+- Launch Configuration
+- AutoScaling Group
+- Elastic Load Balancer
+- Custom Resource to add a CNAME for the ELB to our on-premise DNS via call out to Lambda
+@ulend
+
+Deploying to production? Let's add these as well:
+
+@ul
+- AutoScaling Group Notification Config to notify when the ASG scales up or down
+- SNS Topic to push the ASG events to SQS so that production monitoring can add or remove hosts as needed
+@ulend
+
+---?code=StdWebASGStack.ps1&lang=powershell&color=#282C34
+
+@snap[north]
+<h3>The Stack</h3>
+@snapend
 
 @[1-10](Parameterize the script so we can set config file path and the environment we are deploying to)
 @[11](Import the VaporShell module)
