@@ -42,6 +42,10 @@
     font-size: 1.45em;
 }
 
+.reveal h6 {
+    font-size: 0.25em;
+}
+
 .reveal blockquote {
     width: 95%;
 }
