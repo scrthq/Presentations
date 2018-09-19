@@ -1,9 +1,9 @@
 ---?color=#282C34
 
 @snap[west]
-### Building Dynamic CloudFormation Templates with VaporShell<br><br>
-##### Nate Ferrell<br>Systems & DevOps Engineer
-###### [@fa[pencil] ferrell.io](https://ferrell.io/)<br>[@fa[twitter] @scrthq](https://twitter.com/scrthq)<br>[@fa[github] @scrthq](https://github.com/scrthq)
+<h3>Building Dynamic CloudFormation Templates with VaporShell</h3><br><br>
+<h4>Nate Ferrell<br>Systems & DevOps Engineer</h4><br>
+<h5>[@fa[pencil] ferrell.io](https://ferrell.io/)<br>[@fa[twitter] @scrthq](https://twitter.com/scrthq)<br>[@fa[github] @scrthq](https://github.com/scrthq)</h5>
 @snapend
 
 ---?code=StdSqlExpressRDS.ps1&lang=powershell&color=#282C34
