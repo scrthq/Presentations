@@ -17,6 +17,12 @@ VaporShell is a PowerShell module designed to abstract AWS CloudFormation templa
 
 ### _Why_ VaporShell?
 
+![y tho](https://i.kym-cdn.com/entries/icons/facebook/000/022/978/yNlQWRM.jpg)
+
+---?color=#282C34
+
+### _Why_ VaporShell?
+
 VaporShell offers a number of benefits over creating templates in JSON or YAML, including...
 
 @ul
