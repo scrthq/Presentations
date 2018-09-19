@@ -78,7 +78,7 @@ Deploying to production? Let's add these as well:
 @[31-34](If we're deploying to production, we'll also add in our production monitoring resources)
 @[36](We're going to export the template to file for backup purposes, so let's save it as YAML using the template name provided in the configuration by passing the file path to the `ToYAML` method)
 @[38-50](Finally, let's validate the template and deploy it)
-@[38-50](This time, we'll add some more error handling around it so we don't deploy an invalid template that could just fail)
+@[38-50](We'll add some more error handling around it so we don't deploy an invalid template that could just fail)
 @[41](We'll check if the stack exists...)
 @[42](If it does, we'll create a Change Set for that stack...)
 @[45](Otherwise we'll deploy it as a new stack entirely)
