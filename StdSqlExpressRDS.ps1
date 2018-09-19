@@ -71,9 +71,8 @@ $output = New-VaporOutput @newVaporOutputSplat
 $template.AddOutput($output)
 
 $template.ToYAML()
-Read-Host "Press [enter] to continue"
-
 $template.Validate('default')
+Read-Host "Press [enter] to continue"
 
 $newVSStackSplat = @{
     TemplateBody = $template
