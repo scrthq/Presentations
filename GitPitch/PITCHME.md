@@ -40,7 +40,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 
 ### What are we building today?
 
-We'll be building a CloudFormation stack using an environment specific configuration file containing the following resources:
+We'll be building a CloudFormation stack containing the following resources:
 
 @ul
 - S3 Bucket
