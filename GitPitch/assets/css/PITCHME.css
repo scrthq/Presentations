@@ -6,11 +6,10 @@
     text-align: center;
 }
 
-.reveal pre {
+pre {
     font-size: 0.4em;
     border: 0;
     width: 90%;
-    align-content: center;
 }
 
 .reveal .controls {
