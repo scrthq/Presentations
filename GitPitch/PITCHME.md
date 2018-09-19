@@ -1,4 +1,4 @@
----?color=#282C34
+---?color=#282C34&layout=center-left
 
 ### Building Dynamic CloudFormation Templates with VaporShell<br><br>
 ##### Nate Ferrell<br>Systems & DevOps Engineer
