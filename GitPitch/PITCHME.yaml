@@ -1,4 +1,4 @@
 theme : night
-highlight : night
+highlight : obsidian
 theme-override : assets/css/PITCHME.css
 layout : center-left
