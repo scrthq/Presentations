@@ -67,4 +67,7 @@ We'll be building 2 CloudFormation templates:
 @[13](Import the config at path with specified key. This also automatically sets the `$global:VSConfig` variable so it's accessible from other scripts in the same session)
 @[15](Initialize a template object at the global scope so it's also accessible from other scripts)
 @[17](Create a global array to house notification configs. This will be filled if environment is production)
-@[24-27](Add an S3 bucket for the front-end hosts to access resources from)
+@[24-27](Add an S3 bucket for the front-end hosts to access resources from using a standard script)
+@[29-32](Add our UserData for our Launch Configuration using the `Add-UserData` helper function)
+
++++?code=StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 bucket script
