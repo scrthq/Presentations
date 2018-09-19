@@ -2,7 +2,7 @@
 
 ### Building Dynamic CloudFormation Templates with VaporShell<br><br>
 ##### Nate Ferrell<br>Systems & DevOps Engineer
-###### [@fa[laptop-code] ferrell.io](https://ferrell.io/)<br>[@fa[twitter] @scrthq](https://twitter.com/scrthq)<br>[@fa[github] @scrthq](https://github.com/scrthq)
+###### [@fa[pencil] ferrell.io](https://ferrell.io/)<br>[@fa[twitter] @scrthq](https://twitter.com/scrthq)<br>[@fa[github] @scrthq](https://github.com/scrthq)
 
 
 ---?code=StdSqlExpressRDS.ps1&lang=powershell&color=#282C34
