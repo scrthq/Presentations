@@ -50,7 +50,7 @@ We'll be building a CloudFormation stack using an environment specific configura
 - Launch Configuration
 - AutoScaling Group
 - Elastic Load Balancer
-- Custom Resource to add a CNAME for the ELB to our on-premise DNS via call out to Lambda
+- Custom Resource to add a CNAME for the ELB
 @ulend
 
 ---?color=#282C34
