@@ -1,3 +1,3 @@
-# Building Dynamic CloudFormation Templates with VaporShell
+### @color[orange](Building Dynamic CloudFormation Templates with VaporShell)
 
-> Nate Ferrell (@scrthq) - Systems & DevOps Engineer
+> @size[1em](_Nate Ferrell (@scrthq) - Systems & DevOps Engineer_)
