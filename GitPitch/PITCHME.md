@@ -53,6 +53,11 @@ We'll be building a CloudFormation stack using an environment specific configura
 - Custom Resource to add a CNAME for the ELB to our on-premise DNS via call out to Lambda
 @ulend
 
+---?color=#282C34
+
+### What are we building today?
+
+
 Deploying to production? Let's add these as well:
 
 @ul
