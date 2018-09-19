@@ -19,23 +19,23 @@ $newVaporResourceSplat = @{
     LogicalId = "SecretsManagerCustomResource"
 }
 $customResource = New-VaporResource @newVaporResourceSplat
-$secretValue = Add-FnGetAtt $customResource -AttributeName 'Secret'
+$secretValue = Add-FnGetAtt $customResource 'Secret'
 
-$addVSEC2SGIngressParams = @{
+$ec2SGIngressParams = @{
     IpProtocol = 'tcp'
     ToPort = '1433'
     FromPort = '1433'
     CidrIp = "$(Invoke-RestMethod http://ipinfo.io/json |
                 Select-Object -ExpandProperty IP)/32"
 }
-$sgIngress = Add-VSEC2SecurityGroupIngress @addVSEC2SGIngressParams
+$sgIngress = Add-VSEC2SecurityGroupIngress @ec2SGIngressParams
 
-$newVSEC2SecurityGroupSplat = @{
+$ec2SGParams = @{
     GroupDescription = 'Port 1433 access to RDS from local only'
     SecurityGroupIngress = $sgIngress
     LogicalId = 'RDSSecurityGroup'
 }
-$ec2SecurityGroup = New-VSEC2SecurityGroup @newVSEC2SecurityGroupSplat
+$ec2SecurityGroup = New-VSEC2SecurityGroup @ec2SGParams
 
 $newVSRDSDBInstanceSplat = @{
     AllocatedStorage = '25'
@@ -59,6 +59,10 @@ $template.AddResource($customResource,$ec2SecurityGroup,$rdsInstance)
 $template.AddOutput(
     (New-VaporOutput -LogicalId RDSMasterPassword -Value $secretValue)
 )
+
+$template.ToYAML()
+
+$template.Validate('default')
 
 $newVSStackSplat = @{
     TemplateBody = $template
