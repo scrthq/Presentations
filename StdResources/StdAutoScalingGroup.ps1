@@ -24,7 +24,7 @@ $policyParams = @{
                     "logs:DescribeLogStreams"
                     "logs:PutLogEvents"
                 )
-                Resource = @("*")
+                Resource = @("arn:aws:logs:*:*:log-group:/*/*/*")
             },
             @{
                 # Allow EC2 instances in ASG to retrieve the stack's tags

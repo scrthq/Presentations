@@ -6,26 +6,35 @@ Resources:
     Properties:
       BucketName: MyBucket_Prd
       Tags:
-        - Key: Name
-          Value: cf-web-1
-        - Key: Department
-          Value: technology
-        - Key: Environment
-          Value: production
-        - Key: Application
-          Value: MyCoolWebApp
-        - Key: Division
-          Value: infrastructure
         - Key: Role
           Value: web
+        - Key: Division
+          Value: infrastructure
+        - Key: Application
+          Value: MyCoolWebApp
+        - Key: Name
+          Value: cf-web-1
+        - Key: Environment
+          Value: production
+        - Key: Department
+          Value: technology
       AccessControl: BucketOwnerFullControl
   StdEC2Role:
     Type: AWS::IAM::Role
     Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
       Path: /
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy
       Policies:
-        - PolicyName: DefaultEC2Policy
-          PolicyDocument:
+        - PolicyDocument:
             Statement:
               - Effect: Allow
                 Resource:
@@ -59,16 +68,7 @@ Resources:
                 Action:
                   - s3:Get*
                   - s3:List*
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - ec2.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy
+          PolicyName: DefaultEC2Policy
   StdEC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
@@ -77,8 +77,6 @@ Resources:
   StdS3Policy:
     Type: AWS::IAM::Policy
     Properties:
-      Roles:
-        - !Ref 'StdEC2Role'
       PolicyDocument:
         Statement:
           - Effect: Allow
@@ -97,16 +95,12 @@ Resources:
               - s3:GetObject
               - s3:ListBucket
               - s3:PutObject
+      Roles:
+        - !Ref 'StdEC2Role'
       PolicyName: StdS3Policy
   StdPRDMonitoringTopic:
     Type: AWS::SNS::Topic
     Properties:
-      TopicName: !Join
-        - ''
-        - - Monitoring_Environment-
-          - prd
-          - _Application-
-          - web-tier-core
       Subscription:
         - Endpoint: !Join
             - ''
@@ -116,6 +110,12 @@ Resources:
               - !Ref 'AWS::AccountId'
               - MonitoringQueue
           Protocol: sqs
+      TopicName: !Join
+        - ''
+        - - Monitoring_Environment-
+          - prd
+          - _Application-
+          - web-tier-core
   StdPRDMonitoringHostTemplate:
     Type: Custom::MonitoringHostTemplate
     Properties:
@@ -132,35 +132,9 @@ Resources:
   StdElasticLoadBalancer:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
-      HealthCheck:
-        Target: HTTPS:443/healthcheck.htm
-        HealthyThreshold: '2'
-        UnhealthyThreshold: '2'
-        Interval: '12'
-        Timeout: '10'
-      SecurityGroups:
-        - !ImportValue 'webserver-sec-group'
       Subnets:
         - !ImportValue 'subnet-web-front-end-us-west-2a'
         - !ImportValue 'subnet-web-front-end-us-west-2b'
-      LoadBalancerName: !Join
-        - '-'
-        - - web-tier-core
-          - prd
-      Tags:
-        - Key: Name
-          Value: cf-web-1
-        - Key: Department
-          Value: technology
-        - Key: Environment
-          Value: production
-        - Key: Application
-          Value: MyCoolWebApp
-        - Key: Division
-          Value: infrastructure
-        - Key: Role
-          Value: web
-      Scheme: Internal
       Listeners:
         - LoadBalancerPort: '80'
           InstancePort: '80'
@@ -174,6 +148,32 @@ Resources:
       ConnectionDrainingPolicy:
         Enabled: true
         Timeout: 300
+      LoadBalancerName: !Join
+        - '-'
+        - - web-tier-core
+          - prd
+      SecurityGroups:
+        - !ImportValue 'webserver-sec-group'
+      HealthCheck:
+        Target: HTTPS:443/healthcheck.htm
+        HealthyThreshold: '2'
+        UnhealthyThreshold: '2'
+        Interval: '12'
+        Timeout: '10'
+      Tags:
+        - Key: Role
+          Value: web
+        - Key: Division
+          Value: infrastructure
+        - Key: Application
+          Value: MyCoolWebApp
+        - Key: Name
+          Value: cf-web-1
+        - Key: Environment
+          Value: production
+        - Key: Department
+          Value: technology
+      Scheme: Internal
   StdLaunchConfiguration:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
@@ -203,20 +203,20 @@ Resources:
             - '}'
             - </powershell>
       IamInstanceProfile: !Ref 'StdEC2InstanceProfile'
-      ImageId: ami-f582359e
       SecurityGroups:
         - !ImportValue 'monitorpatching-sec-group'
         - !ImportValue 'windowsmanagement-sec-group'
         - !ImportValue 'ad-sec-group'
         - !ImportValue 'webserver-sec-group'
       KeyName: WindowsPrd
+      ImageId: ami-f582359e
       InstanceType: t2.large
   StdAutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      AvailabilityZones:
-        - us-west-2a
-        - us-west-2b
+      MinSize: '2'
+      MaxSize: '4'
+      LaunchConfigurationName: !Ref 'StdLaunchConfiguration'
       NotificationConfigurations:
         - NotificationTypes:
             - autoscaling:EC2_INSTANCE_LAUNCH
@@ -224,56 +224,56 @@ Resources:
             - autoscaling:EC2_INSTANCE_TERMINATE
             - autoscaling:EC2_INSTANCE_TERMINATE_ERROR
           TopicARN: !Ref 'StdPRDMonitoringTopic'
-      LoadBalancerNames:
-        - !Ref 'StdElasticLoadBalancer'
-      HealthCheckType: EC2
-      DesiredCapacity: '4'
-      LaunchConfigurationName: !Ref 'StdLaunchConfiguration'
-      MaxSize: '4'
       VPCZoneIdentifier:
         - !ImportValue 'subnet-web-front-end-us-west-2a'
         - !ImportValue 'subnet-web-front-end-us-west-2b'
-      MinSize: '2'
+      DesiredCapacity: '4'
+      LoadBalancerNames:
+        - !Ref 'StdElasticLoadBalancer'
+      AvailabilityZones:
+        - us-west-2a
+        - us-west-2b
+      HealthCheckType: EC2
       Tags:
-        - Key: Name
-          Value: cf-web-1
-          PropagateAtLaunch: true
-        - Key: Department
-          Value: technology
-          PropagateAtLaunch: true
-        - Key: Environment
-          Value: production
-          PropagateAtLaunch: true
-        - Key: Application
-          Value: MyCoolWebApp
+        - Key: Role
+          Value: web
           PropagateAtLaunch: true
         - Key: Division
           Value: infrastructure
           PropagateAtLaunch: true
-        - Key: Role
-          Value: web
+        - Key: Application
+          Value: MyCoolWebApp
+          PropagateAtLaunch: true
+        - Key: Name
+          Value: cf-web-1
+          PropagateAtLaunch: true
+        - Key: Environment
+          Value: production
+          PropagateAtLaunch: true
+        - Key: Department
+          Value: technology
           PropagateAtLaunch: true
     CreationPolicy:
       AutoScalingCreationPolicy:
         MinSuccessfulInstancesPercent: '100'
       ResourceSignal:
-        Count: '4'
         Timeout: PT1H
+        Count: '4'
     UpdatePolicy:
       AutoScalingRollingUpdate:
-        MinInstancesInService: '2'
+        PauseTime: PT1H
         MaxBatchSize: '2'
+        WaitOnResourceSignals: 'true'
         SuspendProcesses:
           - HealthCheck
           - ReplaceUnhealthy
           - AZRebalance
           - AlarmNotification
           - ScheduledActions
-        WaitOnResourceSignals: 'true'
-        PauseTime: PT1H
+        MinInstancesInService: '2'
   StdElbDnsEntry:
     Type: Custom::DNSEntry
     Properties:
-      RecordName: web-tier-core-prd
       RecordData: !GetAtt 'StdElasticLoadBalancer.DNSName'
+      RecordName: web-tier-core-prd
       ServiceToken: !ImportValue 'dns-entry-sns-arn'
