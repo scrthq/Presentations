@@ -14,9 +14,6 @@ $conf = Import-VSTemplateConfig -Path $ConfigPath -Key $ConfigKey
 
 $global:template = Initialize-Vaporshell -Description $conf.Description
 
-$global:notificationConfig = @()
-
-# Compile the tags into an array
 $stackTags = $conf.Tags.Keys | ForEach-Object{
     Add-VSTag -Key $_ -Value $conf.Tags[$_]
 }

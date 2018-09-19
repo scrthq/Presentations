@@ -66,12 +66,12 @@ We'll be building 2 CloudFormation templates:
 @[11](Import the VaporShell module)
 @[13](Import the config at path with specified key. This also automatically sets the `$global:VSConfig` variable so it's accessible from other scripts in the same session)
 @[15](Initialize a template object at the global scope so it's also accessible from other scripts)
-@[17](Create a global array to house notification configs. This will be filled if environment is production)
-@[24-27](Add an S3 bucket for the front-end hosts to access resources from using a standard script)
-@[29-32](Add our UserData for our Launch Configuration using the `Add-UserData` helper function, replacing strings in the script contents using the supplied hashtable)
-@[34-36](Add in the components necessary for our web stack, including an ASG, ELB, Launch Config and EC2 Role...)
-@[34-36](If we're deploying to production, we'll also add in our production monitoring resources)
-@[38](We're going to want to export the template to file, so let's save it as YAML using the template name provided in the configuration)
+@[17-19](Compile the tags from the config into an array of CloudFormation-formatted Tags)
+@[21-24](Add an S3 bucket for the front-end hosts to access resources from using a standard script)
+@[26-29](Add our UserData for our Launch Configuration using the `Add-UserData` helper function, replacing strings in the script contents using the supplied hashtable)
+@[31-33](Add in the components necessary for our web stack, including an ASG, ELB, Launch Config and EC2 Role...)
+@[31-33](If we're deploying to production, we'll also add in our production monitoring resources)
+@[35](We're going to export the template to file for backup purposes, so let's save it as YAML using the template name provided in the configuration by passing the file path to the `ToYAML` method)
 
 
 

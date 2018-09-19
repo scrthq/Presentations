@@ -116,7 +116,7 @@ if ($Global:VSConfig.Environment -eq 'prd') {
     }
     New-VSSNSTopic @topicParams
 
-    $global:notificationConfig += Add-VSAutoScalingAutoScalingGroupNotificationConfiguration -NotificationTypes @(
+    $notificationConfig += Add-VSAutoScalingAutoScalingGroupNotificationConfiguration -NotificationTypes @(
         'autoscaling:EC2_INSTANCE_LAUNCH'
         'autoscaling:EC2_INSTANCE_LAUNCH_ERROR'
         'autoscaling:EC2_INSTANCE_TERMINATE'
@@ -215,7 +215,7 @@ $asgParams = @{
     HealthCheckType = 'EC2'
     UpdatePolicy = (Add-UpdatePolicy @asgUpdatePolicy)
     CreationPolicy = (Add-CreationPolicy @asgCreationPolicy)
-    NotificationConfigurations = $Global:notificationConfig
+    NotificationConfigurations = $notificationConfig
 }
 
 New-VSAutoScalingAutoScalingGroup @asgParams
