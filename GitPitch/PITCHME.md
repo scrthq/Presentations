@@ -50,7 +50,7 @@ We'll be building a CloudFormation stack containing the following resources:
 - Launch Configuration
 - AutoScaling Group
 - Elastic Load Balancer
-- Custom Resource to add a CNAME for the ELB
+- Custom Resource to add a CNAME to DNS for the ELB
 @ulend
 
 ---?color=#282C34
