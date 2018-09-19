@@ -18,15 +18,15 @@ VaporShell is a PowerShell module designed to abstract AWS CloudFormation templa
 @ulend
 
 ---?code=StdSqlExpressRDS.ps1&lang=powershell&color=#282C34&title=Creating a stack without a config file
-@[1-6](Parameterize the script )
+@[1-6](Parameterize the script so we can set the environment we are deploying to)
 @[7](Import the VaporShell module)
 @[8-11](Initialize the template object with a useful description for the stack)
 @[13-28](Create the custom resource that will fetch the RDS Master Password from AWS Secrets Manager...)
 @[22](...using the `$Environment` parameter to set the SecretId)
 @[29](Store the call to `Fn::GetAtt` to avoid repetitive code)
-@[31-39](Let's set our CIDR range based on the `$Environment` we're deploying to)
-@[31-39](Create an ingress rule for the Security Group to allow access from local only...)
-@[29-30](...using a quick call to `ipinfo.io` to get our current public IP for that ingress rule 👍)
+@[31-45](Create an ingress rule for the Security Group to allow access from the specified CIDR...)
+@[36-39](... If we're in `dev`, allow access from your current public IP only using a quick call to `ipinfo.io` to get our current public IP for that ingress rule 👍...)
+@[40-42](...otherwise, let's lock it down to our local CIDR block)
 @[34-40](Create the Security Group and attach the ingress rule we just created)
 @[42-58](Create the RDS instance)
 @[60-64](Add the created resources to the template)
