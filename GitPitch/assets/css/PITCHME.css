@@ -11,7 +11,7 @@
 }
 
 .reveal pre {
-    width: 120%;
+    width: 120% !important;
 }
 
 .reveal .controls {
