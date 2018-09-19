@@ -2,7 +2,7 @@ Param (
     [parameter(Mandatory = $false)]
     [ValidateSet('dev','stg','prd')]
     [String]
-    $Environment
+    $Environment = 'dev'
 )
 Import-Module VaporShell
 $initializeVaporshellSplat = @{
@@ -28,25 +28,24 @@ $newVaporResourceSplat = @{
 $customResource = New-VaporResource @newVaporResourceSplat
 $secretValue = Add-FnGetAtt $customResource 'Secret'
 
-$CidrIp = switch ($Environment) {
-    dev {
-        "$(Invoke-RestMethod http://ipinfo.io/json |
-            Select-Object -ExpandProperty IP)/32"
-    }
-    Default {
-        "10.0.0.0/8"
-    }
-}
 $ec2SGIngressParams = @{
     IpProtocol = 'tcp'
     ToPort = '1433'
     FromPort = '1433'
-    CidrIp = $CidrIp
+    CidrIp = $(switch ($Environment) {
+        dev {
+            "$(Invoke-RestMethod http://ipinfo.io/json |
+                Select-Object -ExpandProperty IP)/32"
+        }
+        Default {
+            "10.0.0.0/8"
+        }
+    })
 }
 $sgIngress = Add-VSEC2SecurityGroupIngress @ec2SGIngressParams
 
 $ec2SGParams = @{
-    GroupDescription = 'Port 1433 access to RDS from local'
+    GroupDescription = 'Port 1433 access to RDS from CIDR'
     SecurityGroupIngress = $sgIngress
     LogicalId = 'RDSSecurityGroup'
 }
@@ -59,7 +58,14 @@ $newVSRDSDBInstanceSplat = @{
     LogicalId = "SqlServerExpress"
     EngineVersion = "13.00.4451.0.v1"
     DBInstanceIdentifier = 'cf-sqlserver-ex-1'
-    PubliclyAccessible = $true
+    PubliclyAccessible = $(switch ($Environment) {
+        dev {
+            $true
+        }
+        Default {
+            $false
+        }
+    })
     VPCSecurityGroups = $vpcGroupId
     MasterUsername = 'rdsmaster'
     StorageType = 'gp2'
@@ -77,12 +83,14 @@ $template.AddResource(
     $rdsInstance
 )
 
-$newVaporOutputSplat = @{
-    Value = $secretValue
-    LogicalId = 'RDSMasterPassword'
+if ($Environment -eq 'dev') {
+    $newVaporOutputSplat = @{
+        Value = $secretValue
+        LogicalId = 'RDSMasterPassword'
+    }
+    $output = New-VaporOutput @newVaporOutputSplat
+    $template.AddOutput($output)
 }
-$output = New-VaporOutput @newVaporOutputSplat
-$template.AddOutput($output)
 
 $template.ToYAML()
 $template.Validate('default')
