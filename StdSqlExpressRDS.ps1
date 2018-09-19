@@ -1,104 +1,16 @@
-Param (
-    [parameter(Mandatory = $false)]
-    [ValidateSet('dev','stg','prd')]
-    [String]
-    $Environment = 'dev'
+Import-Module VaporShell
+$template = Initialize-Vaporshell -Description "My SQL Server RDS stack"
+$customResource = New-VaporResource -LogicalId "SecretsManagerCustomResource" -Type "Custom::SecretsManager" -Properties @{
+    ServiceToken = (Add-FnJoin -Delimiter "" -ListOfValues 'arn:aws:lambda:',(Add-FnRef $_AWSRegion),':',(Add-FnRef $_AWSAccountId),':function:SecretsManagerCustomResource')
+    SecretId = 'development/RDS'
+    SecretKey = 'RDSMasterPassword'
+}
+$secretValue = Add-FnGetAtt $customResource -AttributeName 'Secret'
+$securityGroupIngress = Add-VSEC2SecurityGroupIngress -CidrIp "$(Invoke-RestMethod http://ipinfo.io/json | Select-Object -ExpandProperty IP)/32" -FromPort '1433' -ToPort '1433' -IpProtocol 'tcp'
+$ec2SecurityGroup = New-VSEC2SecurityGroup -LogicalId 'RDSSecurityGroup' -GroupDescription 'Port 1433 access to RDS from local only' -SecurityGroupIngress $securityGroupIngress
+$rdsInstance = New-VSRDSDBInstance -LogicalId "SqlServerExpress" -MasterUsername 'rdsmaster' -MasterUserPassword $secretValue -DBInstanceClass 'db.t2.micro' -PubliclyAccessible $true -Engine 'sqlserver-ex' -MultiAZ $false -StorageType 'gp2' -EngineVersion "13.00.4451.0.v1" -DBInstanceIdentifier 'cf-sqlserver-ex-1' -AllocatedStorage '25' -AvailabilityZone 'us-west-2a' -VPCSecurityGroups (Add-FnGetAtt $ec2SecurityGroup 'GroupId') -DependsOn $ec2SecurityGroup
+$template.AddResource($customResource,$ec2SecurityGroup,$rdsInstance)
+$template.AddOutput(
+    (New-VaporOutput -LogicalId RDSMasterPassword -Value $secretValue)
 )
-Import-Module VaporShell -MinimumVersion 2.5.4
-$initializeVaporshellSplat = @{
-    Description = "My SQL Server RDS stack"
-}
-$template = Initialize-Vaporshell @initializeVaporshellSplat
-
-$newVaporResourceSplat = @{
-    Properties = @{
-        ServiceToken = (Add-FnJoin "" @(
-            'arn:aws:lambda:'
-            (Add-FnRef $_AWSRegion)
-            ':'
-            (Add-FnRef $_AWSAccountId)
-            ':function:SecretsManagerCustomResource')
-        )
-        SecretId = "$Environment/RDS"
-        SecretKey = 'RDSMasterPassword'
-    }
-    Type = "Custom::SecretsManager"
-    LogicalId = "SecretsManagerCustomResource"
-}
-$customResource = New-VaporResource @newVaporResourceSplat
-$secretValue = Add-FnGetAtt $customResource 'Secret'
-
-$ec2SGIngressParams = @{
-    IpProtocol = 'tcp'
-    ToPort = '1433'
-    FromPort = '1433'
-    CidrIp = $(switch ($Environment) {
-        dev {
-            "$(Invoke-RestMethod http://ipinfo.io/json |
-                Select-Object -ExpandProperty IP)/32"
-        }
-        default {
-            "10.0.0.0/8"
-        }
-    })
-}
-$sgIngress = Add-VSEC2SecurityGroupIngress @ec2SGIngressParams
-
-$ec2SGParams = @{
-    GroupDescription = 'Port 1433 access to RDS from CIDR'
-    SecurityGroupIngress = $sgIngress
-    LogicalId = 'RDSSecurityGroup'
-}
-$ec2SecurityGroup = New-VSEC2SecurityGroup @ec2SGParams
-$vpcGroupId = Add-FnGetAtt $ec2SecurityGroup 'GroupId'
-
-$newVSRDSDBInstanceSplat = @{
-    AllocatedStorage = '25'
-    MasterUserPassword = $secretValue
-    LogicalId = "SqlServerExpress"
-    EngineVersion = "13.00.4451.0.v1"
-    DBInstanceIdentifier = 'cf-sqlserver-ex-1'
-    PubliclyAccessible = $(switch ($Environment) {
-        dev {
-            $true
-        }
-        default {
-            $false
-        }
-    })
-    VPCSecurityGroups = $vpcGroupId
-    MasterUsername = 'rdsmaster'
-    StorageType = 'gp2'
-    DependsOn = $ec2SecurityGroup
-    AvailabilityZone = 'us-west-2a'
-    MultiAZ = $false
-    Engine = 'sqlserver-ex'
-    DBInstanceClass = 'db.t2.micro'
-}
-$rdsInstance = New-VSRDSDBInstance @newVSRDSDBInstanceSplat
-
-$template.AddResource(
-    $customResource,
-    $ec2SecurityGroup,
-    $rdsInstance
-)
-
-if ($Environment -eq 'dev') {
-    $newVaporOutputSplat = @{
-        Value = $secretValue
-        LogicalId = 'RDSMasterPassword'
-    }
-    $output = New-VaporOutput @newVaporOutputSplat
-    $template.AddOutput($output)
-}
-
-$template.ToYAML()
-$template.Validate($Environment)
-Read-Host "Press [enter] to continue"
-
-$newVSStackSplat = @{
-    TemplateBody = $template
-    StackName = "my-sql-express-stack"
-    ProfileName = $Environment
-}
-New-VSStack @newVSStackSplat
+New-VSStack -TemplateBody $template -StackName "my-sql-express-stack" -ProfileName dev -WhatIf

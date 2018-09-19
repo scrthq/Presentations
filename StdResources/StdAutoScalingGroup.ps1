@@ -164,12 +164,12 @@ $launchConfigParams = @{
     InstanceType = $Global:VSConfig.InstanceType
     IamInstanceProfile = (Add-FnRef 'StdEC2InstanceProfile')
 }
-if ($PSBoundParameters.Keys -contains 'UserData') {
+if ($UserData) {
     $launchConfigParams['UserData'] = if ($UserData.PSTypeNames[0] -eq 'Vaporshell.Resource.UserData') {
         $UserData
     }
     elseif (Test-Path $UserData) {
-        Add-UserData -File $UserData
+        Add-UserData -File $UserData -UseJoin
     }
     else {
         Add-UserData -String $UserData
