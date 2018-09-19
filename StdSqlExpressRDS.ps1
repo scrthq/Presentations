@@ -32,11 +32,12 @@ $ec2SGIngressParams = @{
 $sgIngress = Add-VSEC2SecurityGroupIngress @ec2SGIngressParams
 
 $ec2SGParams = @{
-    GroupDescription = 'Port 1433 access to RDS from local only'
+    GroupDescription = 'Port 1433 access to RDS from local'
     SecurityGroupIngress = $sgIngress
     LogicalId = 'RDSSecurityGroup'
 }
 $ec2SecurityGroup = New-VSEC2SecurityGroup @ec2SGParams
+$vpcGroupId = Add-FnGetAtt $ec2SecurityGroup 'GroupId'
 
 $newVSRDSDBInstanceSplat = @{
     AllocatedStorage = '25'
@@ -45,7 +46,7 @@ $newVSRDSDBInstanceSplat = @{
     EngineVersion = "13.00.4451.0.v1"
     DBInstanceIdentifier = 'cf-sqlserver-ex-1'
     PubliclyAccessible = $true
-    VPCSecurityGroups = (Add-FnGetAtt $ec2SecurityGroup 'GroupId')
+    VPCSecurityGroups = $vpcGroupId
     MasterUsername = 'rdsmaster'
     StorageType = 'gp2'
     DependsOn = $ec2SecurityGroup
@@ -70,6 +71,7 @@ $output = New-VaporOutput @newVaporOutputSplat
 $template.AddOutput($output)
 
 $template.ToYAML()
+Read-Host "Press [enter] to continue"
 
 $template.Validate('default')
 
