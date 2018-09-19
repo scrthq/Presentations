@@ -4,7 +4,7 @@ Param (
     [String]
     $Environment = 'dev'
 )
-Import-Module VaporShell
+Import-Module VaporShell -MinimumVersion 2.5.4
 $initializeVaporshellSplat = @{
     Description = "My SQL Server RDS stack"
 }
