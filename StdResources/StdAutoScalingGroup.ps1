@@ -45,10 +45,11 @@ $policyParams = @{
     }
 }
 if ($PSBoundParameters.Keys -contains 'BucketName') {
-    # If a BucketName or list of BucketNames is specified, add permission to Get and List bucket and bucket objects
+    # If a BucketName or list of BucketNames is specified,
+    # add permission to Get and List bucket and bucket objects
     $bucketResources = foreach ($bucket in $PSBoundParameters['BucketName']) {
-        Add-FnJoin -Delimiter "" -ListOfValues @("arn:aws:s3:::", $bucket)
-        Add-FnJoin -Delimiter "" -ListOfValues @("arn:aws:s3:::", $bucket, "/*")
+        Add-FnJoin "" @("arn:aws:s3:::", $bucket)
+        Add-FnJoin "" @("arn:aws:s3:::", $bucket, "/*")
     }
     $policyParams.PolicyDocument.Statement += @{
         Effect = "Allow"
@@ -65,7 +66,9 @@ $resourceParams = @{
     Policies = @(
         (Add-VSIAMRolePolicy @policyParams)
     )
-    ManagedPolicyArns = @("arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy")
+    ManagedPolicyArns = @(
+        "arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy"
+    )
     AssumeRolePolicyDocument = @{
         Statement = @(
             @{
@@ -107,12 +110,24 @@ if ($PSBoundParameters.Keys -contains 'BucketName') {
 }
 
 if ($Global:VSConfig.Environment -eq 'prd') {
+    $subscription = Add-VSSNSTopicSubscription -Endpoint (Add-FnJoin "" @(
+        "arn:aws:sqs:"
+        (Add-FnRef $_AWSRegion)
+        ":"
+        (Add-FnRef $_AWSAccountId)
+        "MonitoringQueue"
+    )) -Protocol 'sqs'
     $topicParams = @{
         LogicalId = 'StdPRDMonitoringTopic'
         Subscription = @(
-            Add-VSSNSTopicSubscription -Endpoint (Add-FnJoin -Delimiter "" -ListOfValues "arn:aws:sqs:",(Add-FnRef $_AWSRegion),":",(Add-FnRef $_AWSAccountId),"MonitoringQueue") -Protocol 'sqs'
+            $subscription
         )
-        TopicName = (Add-FnJoin -Delimiter "" -ListOfValues 'Monitoring_Environment-',$global:VSConfig.Environment,'_Application-',$global:VSConfig.StackName)
+        TopicName = (Add-FnJoin "" @(
+            'Monitoring_Environment-'
+            $global:VSConfig.Environment
+            '_Application-'
+            $global:VSConfig.StackName
+        ))
     }
     New-VSSNSTopic @topicParams
 
@@ -123,12 +138,22 @@ if ($Global:VSConfig.Environment -eq 'prd') {
         'autoscaling:EC2_INSTANCE_TERMINATE_ERROR'
     ) -TopicARN (Add-FnRef 'StdPRDMonitoringTopic')
 
-    New-VaporResource -LogicalId "StdPRDMonitoringHostTemplate" -Type "Custom::MonitoringHostTemplate" -Properties @{
-        ServiceToken = (Add-FnJoin -Delimiter "" -ListOfValues "arn:aws:sns:",(Add-FnRef $_AWSRegion),":",(Add-FnRef $_AWSAccountId),"MonitoringHostTemplateTopic")
+    New-VaporResource -LogicalId "StdPRDMonitoringHostTemplate" -Properties @{
+        ServiceToken = (Add-FnJoin "" @(
+            "arn:aws:sns:"
+            (Add-FnRef $_AWSRegion)
+            ":"
+            (Add-FnRef $_AWSAccountId)
+            "MonitoringHostTemplateTopic"
+        ))
         AccountId = (Add-FnRef $_AWSAccountId)
         HostTemplateName = $global:VSConfig.StackName + "-" + $global:VSConfig.Environment
-        HostTemplateDescription = "Host template for " + $global:VSConfig.StackName + "-" + $global:VSConfig.Environment + " stack."
-    }
+        HostTemplateDescription = "Host template for " +
+            $global:VSConfig.StackName +
+            "-" +
+            $global:VSConfig.Environment +
+            " stack."
+    } -Type "Custom::MonitoringHostTemplate"
 }
 
 $elbParams = @{
@@ -145,7 +170,10 @@ $elbParams = @{
     )
     CrossZone = $true
     SecurityGroups = (Add-FnImportValue "webserver-sec-group")
-    LoadBalancerName = (Add-FnJoin "-" @($Global:VSConfig.StackName,$Global:VSConfig.Environment))
+    LoadBalancerName = (Add-FnJoin "-" @(
+        $Global:VSConfig.StackName
+        $Global:VSConfig.Environment
+    ))
     Scheme = "Internal"
     Tags = $Tags
 }
