@@ -1,4 +1,4 @@
 theme : night
-highlight : ir-black
+highlight : night
 theme-override : assets/css/PITCHME.css
 layout : center-left
