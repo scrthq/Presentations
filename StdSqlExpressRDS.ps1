@@ -1,3 +1,9 @@
+Param (
+    [parameter(Mandatory = $false)]
+    [ValidateSet('dev','stg','prd')]
+    [String]
+    $Environment
+)
 Import-Module VaporShell
 $initializeVaporshellSplat = @{
     Description = "My SQL Server RDS stack"
@@ -13,7 +19,7 @@ $newVaporResourceSplat = @{
             (Add-FnRef $_AWSAccountId)
             ':function:SecretsManagerCustomResource')
         )
-        SecretId = 'development/RDS'
+        SecretId = "$Environment/RDS"
         SecretKey = 'RDSMasterPassword'
     }
     Type = "Custom::SecretsManager"
@@ -22,12 +28,20 @@ $newVaporResourceSplat = @{
 $customResource = New-VaporResource @newVaporResourceSplat
 $secretValue = Add-FnGetAtt $customResource 'Secret'
 
+$CidrIp = switch ($Environment) {
+    dev {
+        "$(Invoke-RestMethod http://ipinfo.io/json |
+            Select-Object -ExpandProperty IP)/32"
+    }
+    Default {
+        "10.0.0.0/8"
+    }
+}
 $ec2SGIngressParams = @{
     IpProtocol = 'tcp'
     ToPort = '1433'
     FromPort = '1433'
-    CidrIp = "$(Invoke-RestMethod http://ipinfo.io/json |
-                Select-Object -ExpandProperty IP)/32"
+    CidrIp = $CidrIp
 }
 $sgIngress = Add-VSEC2SecurityGroupIngress @ec2SGIngressParams
 

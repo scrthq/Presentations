@@ -1,5 +1,5 @@
 theme : night
-color: #282C34
+background-color: #282C34
 highlight : atom-one-dark
 code-line-numbers: true
 theme-override : assets/css/PITCHME.css

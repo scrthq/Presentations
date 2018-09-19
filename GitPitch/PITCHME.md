@@ -9,9 +9,19 @@
 
 ---
 
+### What is VaporShell?
 
+VaporShell is a PowerShell module designed to abstract AWS CloudFormation template building out of JSON...
+
+@ul
+- to abstract
+@ulend
 
 ---?code=StdSqlExpressRDS.ps1&lang=powershell&color=#282C34
+
+### Creating a stack with
+
+@[1-6](Parameterize the script )
 @[1](Import the VaporShell module)
 @[2-5](Initialize the template object with a useful description for the stack)
 @[7-22](Create the custom resource that will fetch the RDS Master Password from AWS Secrets Manager)
