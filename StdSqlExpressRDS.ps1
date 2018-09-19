@@ -37,7 +37,7 @@ $ec2SGIngressParams = @{
             "$(Invoke-RestMethod http://ipinfo.io/json |
                 Select-Object -ExpandProperty IP)/32"
         }
-        Default {
+        default {
             "10.0.0.0/8"
         }
     })
@@ -62,7 +62,7 @@ $newVSRDSDBInstanceSplat = @{
         dev {
             $true
         }
-        Default {
+        default {
             $false
         }
     })
@@ -93,13 +93,13 @@ if ($Environment -eq 'dev') {
 }
 
 $template.ToYAML()
-$template.Validate('default')
+$template.Validate($Environment)
 Read-Host "Press [enter] to continue"
 
 $newVSStackSplat = @{
     TemplateBody = $template
     StackName = "my-sql-express-stack"
-    ProfileName = 'default'
+    ProfileName = $Environment
     WhatIf = $true
 }
 New-VSStack @newVSStackSplat
