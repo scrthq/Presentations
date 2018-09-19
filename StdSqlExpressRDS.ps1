@@ -55,10 +55,18 @@ $newVSRDSDBInstanceSplat = @{
 }
 $rdsInstance = New-VSRDSDBInstance @newVSRDSDBInstanceSplat
 
-$template.AddResource($customResource,$ec2SecurityGroup,$rdsInstance)
-$template.AddOutput(
-    (New-VaporOutput -LogicalId RDSMasterPassword -Value $secretValue)
+$template.AddResource(
+    $customResource,
+    $ec2SecurityGroup,
+    $rdsInstance
 )
+
+$newVaporOutputSplat = @{
+    Value = $secretValue
+    LogicalId = 'RDSMasterPassword'
+}
+$output = New-VaporOutput @newVaporOutputSplat
+$template.AddOutput($output)
 
 $template.ToYAML()
 
