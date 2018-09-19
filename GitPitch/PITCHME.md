@@ -7,7 +7,7 @@
 
 ---?code=StdSqlExpressRDS.ps1&lang=powershell&color=#282C34
 @[1](Import the VaporShell module)
-@[2-5](Initialize the template object)
+@[2-5](Initialize the template object with a useful description for the stack)
 @[7-21](Add the custom resource details that will fetch the RDS Master Password from AWS Secrets Manager)
 @[22](Store the call to `Fn::GetAtt` to remove repetitive code)
 @[24-31](Add an ingress rule for the Security Group to allow access from local only...)
