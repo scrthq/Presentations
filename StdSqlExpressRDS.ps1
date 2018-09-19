@@ -11,7 +11,8 @@ $newVaporResourceSplat = @{
             (Add-FnRef $_AWSRegion)
             ':'
             (Add-FnRef $_AWSAccountId)
-            ':function:SecretsManagerCustomResource'))
+            ':function:SecretsManagerCustomResource')
+        )
         SecretId = 'development/RDS'
         SecretKey = 'RDSMasterPassword'
     }

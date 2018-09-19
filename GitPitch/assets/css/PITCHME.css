@@ -6,9 +6,12 @@
     text-align: center;
 }
 
-.reveal pre {
+.reveal pre code {
     font-size: 0.4em;
-    width: 90%;
+}
+
+.reveal pre {
+    width: 120%;
 }
 
 .reveal .controls {
