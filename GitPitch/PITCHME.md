@@ -6,6 +6,10 @@
 
 
 ---?code=StdSqlExpressRDS.ps1&lang=powershell&color=#282C34
-@[1-2](Init Spark cluster data source)
-@[41-53](Build RDD[AWSTask] from source)
-@[57-62](Delegate RDD[AWSTask] to AWS Lambda)
+@[1](Import the VaporShell module)
+@[2-4](Initialize the template object)
+@[7-21](Add the custom resource details that will fetch the RDS Master Password from Secrets Manager)
+@[22](Store the call to `Fn::GetAtt` to remove repetitive code)
+@[24-31](Add an ingress rule for the Security Group to allow access from local only...)
+@[28-29](...using a quick call to `ipinfo.io` to get our current public IP for that ingress rule :wink:)
+@[33-38](Adding the Security Group and attaching the ingress rule we just created)
