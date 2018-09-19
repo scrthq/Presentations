@@ -12,4 +12,4 @@
 @[22](Store the call to `Fn::GetAtt` to remove repetitive code)
 @[24-31](Add an ingress rule for the Security Group to allow access from local only...)
 @[28-29](...using a quick call to `ipinfo.io` to get our current public IP for that ingress rule 👍)
-@[33-38](Adding the Security Group and attaching the ingress rule we just created)
+@[33-38](Add the Security Group and attaching the ingress rule we just created)
