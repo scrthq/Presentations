@@ -59,3 +59,5 @@ We'll be building 2 CloudFormation templates:
 @[86-93](DEMO ONLY! Don't ever output something sensitive like this in real life! ☠️)
 @[95-97](Cast the template to YAML, validate the template syntax using the AWS CloudFormation SDK then pause to inspect it in the console)
 @[99-105](Finally, deploy the template as a new CloudFormation stack!)
+
+---?code=StdWebASGStack.ps1&lang=powershell&color=#282C34&title=Creating a stack using standardized resources and a configuration file
