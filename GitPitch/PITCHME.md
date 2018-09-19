@@ -9,9 +9,7 @@
 
 ---?color=#282C34
 
-@snap[north]
-<h3><i>What</i> is VaporShell?</h3>
-@snapend
+### _What_ is VaporShell?
 
 VaporShell is a PowerShell module designed to abstract AWS CloudFormation template building out of JSON or YAML while also providing the full range of PowerShell capabilites out-of-the-box
 
@@ -19,17 +17,13 @@ VaporShell is a PowerShell module designed to abstract AWS CloudFormation templa
 
 ---?color=#282C34
 
-@snap[north]
-<h3><i>Why</i> VaporShell?</h3>
-@snapend
+### _Why_ VaporShell?
 
 <img src="https://i.kym-cdn.com/entries/icons/facebook/000/022/978/yNlQWRM.jpg" width="400"/>
 
 ---?color=#282C34
 
-@snap[north]
-<h3><i>Why</i> VaporShell?</h3>
-@snapend
+### _Why_ VaporShell?
 
 VaporShell offers a number of benefits over creating templates in JSON or YAML, including...
 
@@ -44,9 +38,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 
 ---?color=#282C34
 
-@snap[north]
-<h3>What are we building today?</h3>
-@snapend
+### What are we building today?
 
 We'll be building a CloudFormation stack containing the following resources:
 
@@ -63,9 +55,8 @@ We'll be building a CloudFormation stack containing the following resources:
 
 ---?color=#282C34
 
-@snap[north]
-<h3>What are we building today?</h3>
-@snapend
+### What are we building today?
+
 
 Deploying to production? Let's add these as well:
 
@@ -96,19 +87,11 @@ Deploying to production? Let's add these as well:
 @[41](If it does, we'll create a Change Set for that stack...)
 @[44](Otherwise we'll deploy it as a new stack entirely)
 
----?code=StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34
-
-@snap[north]
-<h3>The S3 Bucket script</h3>
-@snapend
+---?code=StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 Bucket script
 
 Simple S3 bucket script without any bells or whistles. Usually all you'll need.
 
----?code=StdResources/StdAutoScalingGroup.ps1&lang=powershell&color=#282C34
-
-@snap[north]
-<h3>The AutoScaling Group script</h3>
-@snapend
+---?code=StdResources/StdAutoScalingGroup.ps1&lang=powershell&color=#282C34&title=The AutoScalingGroup script
 
 This one is a _bit_ more complex due to how many additional resources are needed for a standard AutoScalingGroup.
 
