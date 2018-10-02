@@ -8,7 +8,7 @@ Param(
     [String]
     $ConfigKey='dev'
 )
-#Import-Module VaporShell -MinimumVersion 2.5.4
+Import-Module VaporShell -MinimumVersion 2.5.5
 
 $conf = Import-VSTemplateConfig -Path $ConfigPath -Key $ConfigKey
 
