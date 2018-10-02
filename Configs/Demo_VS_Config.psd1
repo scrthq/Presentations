@@ -1,7 +1,7 @@
 @{
     Dev = @{
         # Let's keep the Dev autoscaling group smaller in size for cost
-        AMI = "ami-f582359e"
+        AMI = "ami-f582959r"
         ASGDesired = "1"
         ASGMax = "1"
         ASGMin = "1"
@@ -25,7 +25,7 @@
     }
     Stg = @{
         # Let's bump up the staging autoscaling group a bit to get us closer to production
-        AMI = "ami-f582359e"
+        AMI = "ami-f582959r"
         ASGDesired = "2"
         ASGMax = "2"
         ASGMin = "1"
@@ -48,7 +48,7 @@
         UserDataFile = "StdUserData.ps1"
     }
     Prd = @{
-        AMI = "ami-f582359e"
+        AMI = "ami-f582959r"
         ASGDesired = "4"
         ASGMax = "4"
         ASGMin = "2"

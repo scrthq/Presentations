@@ -243,9 +243,10 @@ $asgParams = @{
     HealthCheckType = 'EC2'
     UpdatePolicy = (Add-UpdatePolicy @asgUpdatePolicy)
     CreationPolicy = (Add-CreationPolicy @asgCreationPolicy)
-    NotificationConfigurations = $notificationConfig
 }
-
+if ($notificationConfig) {
+    $asgParams.NotificationConfigurations = $notificationConfig
+}
 New-VSAutoScalingAutoScalingGroup @asgParams
 
 New-VaporResource -LogicalId "StdElbDnsEntry" -Type "Custom::DNSEntry" -Properties @{

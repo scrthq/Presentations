@@ -8,7 +8,7 @@ Param(
     [String]
     $ConfigKey='dev'
 )
-Import-Module VaporShell -MinimumVersion 2.5.4
+#Import-Module VaporShell -MinimumVersion 2.5.4
 
 $conf = Import-VSTemplateConfig -Path $ConfigPath -Key $ConfigKey
 
@@ -39,10 +39,10 @@ try {
     $global:template.Validate($conf.Environment)
     try {
         Get-VSStack -StackId $conf.StackName -ProfileName $conf.Environment -ErrorAction Stop
-        New-VSChangeSet -TemplateBody $template -StackName $conf.StackName -ChangeSetName "$($conf.StackName)_$(Get-Date -Format "yyyy_MM_dd")" -ProfileName $conf.Environment
+        New-VSChangeSet -TemplateBody $template -StackName $conf.StackName -ChangeSetName "$($conf.StackName)_$(Get-Date -Format "yyyy_MM_dd")" -ProfileName $conf.Environment -WhatIf
     }
     catch {
-        New-VSStack -TemplateBody $template -StackName $conf.StackName -ProfileName $conf.Environment
+        New-VSStack -TemplateBody $template -StackName $conf.StackName -ProfileName $conf.Environment -WhatIf
     }
 }
 catch {

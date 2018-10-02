@@ -4,62 +4,49 @@ Resources:
   StdS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      AccessControl: BucketOwnerFullControl
-      BucketName: MyBucket_Dev
       Tags:
+        - Key: Name
+          Value: cf-web-d-1
         - Key: Environment
           Value: development
-        - Key: Department
-          Value: technology
         - Key: Division
           Value: infrastructure
         - Key: Role
           Value: web
-        - Key: Name
-          Value: cf-web-d-1
+        - Key: Department
+          Value: technology
         - Key: Application
           Value: MyCoolWebApp
+      AccessControl: BucketOwnerFullControl
+      BucketName: MyBucket_Dev
   StdEC2Role:
     Type: AWS::IAM::Role
     Properties:
       Path: /
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Action:
-              - sts:AssumeRole
-            Principal:
-              Service:
-                - ec2.amazonaws.com
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/CloudWatchAgentAdminPolicy
       Policies:
-        - PolicyName: DefaultEC2Policy
-          PolicyDocument:
+        - PolicyDocument:
             Statement:
-              - Effect: Allow
+              - Resource:
+                  - arn:aws:logs:*:*:log-group:/*/*/*
+                Effect: Allow
                 Action:
                   - logs:CreateLogStream
                   - logs:DescribeLogGroups
                   - logs:DescribeLogStreams
                   - logs:PutLogEvents
-                Resource:
-                  - arn:aws:logs:*:*:log-group:/*/*/*
-              - Effect: Allow
+              - Resource:
+                  - '*'
+                Effect: Allow
+                Condition:
+                  StringEquals:
+                    ec2:ResourceTag/aws:cloudformation:stack-name: web-tier-core-dev
                 Action:
                   - ec2:CreateTags
                   - ec2:DeleteTags
                   - ec2:DescribeTags
-                Resource:
-                  - '*'
-                Condition:
-                  StringEquals:
-                    ec2:ResourceTag/aws:cloudformation:stack-name: web-tier-core-dev
-              - Effect: Allow
-                Action:
-                  - s3:Get*
-                  - s3:List*
-                Resource:
+              - Resource:
                   - !Join
                     - ''
                     - - 'arn:aws:s3:::'
@@ -69,6 +56,19 @@ Resources:
                     - - 'arn:aws:s3:::'
                       - MyBucket_Dev
                       - /*
+                Effect: Allow
+                Action:
+                  - s3:Get*
+                  - s3:List*
+          PolicyName: DefaultEC2Policy
+      AssumeRolePolicyDocument:
+        Statement:
+          - Principal:
+              Service:
+                - ec2.amazonaws.com
+            Effect: Allow
+            Action:
+              - sts:AssumeRole
   StdEC2InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
@@ -77,18 +77,12 @@ Resources:
   StdS3Policy:
     Type: AWS::IAM::Policy
     Properties:
-      PolicyName: StdS3Policy
       Roles:
         - !Ref 'StdEC2Role'
+      PolicyName: StdS3Policy
       PolicyDocument:
         Statement:
-          - Effect: Allow
-            Action:
-              - s3:DeleteObject
-              - s3:GetObject
-              - s3:ListBucket
-              - s3:PutObject
-            Resource:
+          - Resource:
               - !Join
                 - ''
                 - - 'arn:aws:s3:::'
@@ -98,35 +92,43 @@ Resources:
                 - - 'arn:aws:s3:::'
                   - MyBucket_Dev
                   - /*
+            Effect: Allow
+            Action:
+              - s3:DeleteObject
+              - s3:GetObject
+              - s3:ListBucket
+              - s3:PutObject
   StdElasticLoadBalancer:
     Type: AWS::ElasticLoadBalancing::LoadBalancer
     Properties:
-      Tags:
-        - Key: Environment
-          Value: development
-        - Key: Department
-          Value: technology
-        - Key: Division
-          Value: infrastructure
-        - Key: Role
-          Value: web
-        - Key: Name
-          Value: cf-web-d-1
-        - Key: Application
-          Value: MyCoolWebApp
-      LoadBalancerName: !Join
-        - '-'
-        - - web-tier-core
-          - dev
-      ConnectionDrainingPolicy:
-        Enabled: true
-        Timeout: 300
       HealthCheck:
         Target: HTTPS:443/healthcheck.htm
         HealthyThreshold: '2'
         UnhealthyThreshold: '2'
         Interval: '12'
         Timeout: '10'
+      Scheme: Internal
+      Tags:
+        - Key: Name
+          Value: cf-web-d-1
+        - Key: Environment
+          Value: development
+        - Key: Division
+          Value: infrastructure
+        - Key: Role
+          Value: web
+        - Key: Department
+          Value: technology
+        - Key: Application
+          Value: MyCoolWebApp
+      LoadBalancerName: !Join
+        - '-'
+        - - web-tier-core
+          - dev
+      Subnets:
+        - !ImportValue 'subnet-web-front-end-us-west-2a'
+        - !ImportValue 'subnet-web-front-end-us-west-2b'
+      CrossZone: true
       Listeners:
         - LoadBalancerPort: '80'
           InstancePort: '80'
@@ -136,22 +138,25 @@ Resources:
           InstancePort: '443'
           InstanceProtocol: TCP
           Protocol: TCP
-      Scheme: Internal
-      Subnets:
-        - !ImportValue 'subnet-web-front-end-us-west-2a'
-        - !ImportValue 'subnet-web-front-end-us-west-2b'
+      ConnectionDrainingPolicy:
+        Enabled: true
+        Timeout: 300
       SecurityGroups:
         - !ImportValue 'webserver-sec-group'
-      CrossZone: true
   StdLaunchConfiguration:
     Type: AWS::AutoScaling::LaunchConfiguration
     Properties:
+      SecurityGroups:
+        - !ImportValue 'monitorpatching-sec-group'
+        - !ImportValue 'windowsmanagement-sec-group'
+        - !ImportValue 'ad-sec-group'
+        - !ImportValue 'webserver-sec-group'
       InstanceType: t2.micro
-      KeyName: WindowsDev
+      ImageId: ami-f582959r
       IamInstanceProfile: !Ref 'StdEC2InstanceProfile'
       UserData: !Base64
         Fn::Join:
-          - ''
+          - "\n"
           - - <powershell>
             - param(
             - "\t$stackname = 'web-tier-core',"
@@ -174,31 +179,16 @@ Resources:
             - "\tNew-Item -Path $cfnSignalFlag -ItemType File"
             - '}'
             - </powershell>
-      SecurityGroups:
-        - !ImportValue 'monitorpatching-sec-group'
-        - !ImportValue 'windowsmanagement-sec-group'
-        - !ImportValue 'ad-sec-group'
-        - !ImportValue 'webserver-sec-group'
-      ImageId: ami-f582359e
+      KeyName: WindowsDev
   StdAutoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties:
-      DesiredCapacity: '1'
-      MaxSize: '1'
-      LoadBalancerNames:
-        - !Ref 'StdElasticLoadBalancer'
-      VPCZoneIdentifier:
-        - !ImportValue 'subnet-web-front-end-us-west-2a'
-        - !ImportValue 'subnet-web-front-end-us-west-2b'
-      AvailabilityZones:
-        - us-west-2a
-        - us-west-2b
       Tags:
+        - Key: Name
+          Value: cf-web-d-1
+          PropagateAtLaunch: true
         - Key: Environment
           Value: development
-          PropagateAtLaunch: true
-        - Key: Department
-          Value: technology
           PropagateAtLaunch: true
         - Key: Division
           Value: infrastructure
@@ -206,16 +196,25 @@ Resources:
         - Key: Role
           Value: web
           PropagateAtLaunch: true
-        - Key: Name
-          Value: cf-web-d-1
+        - Key: Department
+          Value: technology
           PropagateAtLaunch: true
         - Key: Application
           Value: MyCoolWebApp
           PropagateAtLaunch: true
+      HealthCheckType: EC2
+      MaxSize: '1'
+      VPCZoneIdentifier:
+        - !ImportValue 'subnet-web-front-end-us-west-2a'
+        - !ImportValue 'subnet-web-front-end-us-west-2b'
+      LoadBalancerNames:
+        - !Ref 'StdElasticLoadBalancer'
       MinSize: '1'
       LaunchConfigurationName: !Ref 'StdLaunchConfiguration'
-      NotificationConfigurations: []
-      HealthCheckType: EC2
+      AvailabilityZones:
+        - us-west-2a
+        - us-west-2b
+      DesiredCapacity: '1'
     CreationPolicy:
       AutoScalingCreationPolicy:
         MinSuccessfulInstancesPercent: '100'
@@ -224,6 +223,9 @@ Resources:
         Count: '1'
     UpdatePolicy:
       AutoScalingRollingUpdate:
+        PauseTime: PT1H
+        MaxBatchSize: '0'
+        WaitOnResourceSignals: 'true'
         SuspendProcesses:
           - HealthCheck
           - ReplaceUnhealthy
@@ -231,12 +233,9 @@ Resources:
           - AlarmNotification
           - ScheduledActions
         MinInstancesInService: '1'
-        MaxBatchSize: '0'
-        PauseTime: PT1H
-        WaitOnResourceSignals: 'true'
   StdElbDnsEntry:
     Type: Custom::DNSEntry
     Properties:
-      ServiceToken: !ImportValue 'dns-entry-sns-arn'
       RecordData: !GetAtt 'StdElasticLoadBalancer.DNSName'
+      ServiceToken: !ImportValue 'dns-entry-sns-arn'
       RecordName: web-tier-core-dev
