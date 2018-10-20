@@ -38,7 +38,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 
 ---?color=#282C34
 
-### Single Script Approach
+### The Single Script Approach
 
 @ul
 - The quick and easy way to get going with stack creation
@@ -64,18 +64,19 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 @[15-30](Create the custom resource that will fetch the RDS Master Password from AWS Secrets Manager...)
 @[26](...using the `$Environment` parameter to set the SecretId)
 @[32](Call `Fn::GetAtt` to retrieve the `Secret` attribute of the custom resource)
-@[33](Get our current public IP so we can create our ingress rule for SQL access)
-@[36-39](If we're in `dev`, allow access from our current public IP using a quick call to `ipinfo.io` 👍...)
-@[40-42](...otherwise, let's lock it down to our private VPC CIDR block)
-@[47-52](Create the Security Group and attach the ingress rule we just created...)
-@[53](...and store the GroupId in a variable to use next)
-@[55-78](Create the RDS instance...)
-@[61-68](...and only set it as PubliclyAccessible if we're deploying to dev)
-@[80-84](Add the created resources to the template)
-@[86-93](If we're deploying to `dev`, let's also create an output to allow us to view the fetched RDS Master Password after the stack is created and add that to the template)
-@[86-93](DEMO ONLY! Don't ever output something sensitive like this in real life! ☠️)
-@[95-97](Cast the template to YAML, validate the template syntax using the AWS CloudFormation SDK then pause to inspect it in the console)
-@[99-105](Finally, deploy the template as a new CloudFormation stack!)
+@[33-38](Set our CIDR block for our SQL ingress rule...)
+@[33-35](...if we're deploying to `dev`, get our current public IP...)
+@[36-38](...otherwise, set it to the company's local CIDR block)
+@[40-46](Create our ingress rule using TCP 1433 and the CIDR)
+@[48-53](Create the Security Group and attach the ingress rule we just created...)
+@[54](...and store the GroupId in a variable to use next)
+@[56-74](Create the RDS instance...)
+@[61-63](...and only set it as PubliclyAccessible if we're deploying to dev)
+@[76-80](Add the created resources to the template)
+@[82-89](If we're in `dev`, let's also add an output containing the RDS Master Password to the template)
+@[82-89](DEMO ONLY! Don't ever output something sensitive like this in real life! ☠️)
+@[91-93](Validate the template syntax using the AWS CloudFormation SDK, cast the template to YAML, then pause to inspect it in the console)
+@[95-102](Finally, deploy the template as a new CloudFormation stack!)
 
 ---?color=#282C34
 
@@ -108,9 +109,17 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 
 ---?color=#282C34
 
-### What are we building?
+---?color=#282C34
 
-We'll be building a CloudFormation stack containing the following resources:
+### The Modular Script Approach
+
+@ul
+- All variable values extracted into a configuration psd1
+- Common resources and resource groups stored in standardized scripts
+- Perfect for resources that are standardized, i.e. web/API server stacks
+@ulend
+
+### Modular Stack Resources
 
 @ul
 - S3 Bucket
@@ -152,6 +161,10 @@ Deploying to production? Let's add these as well:
 @[41](We'll check if the stack exists...)
 @[42](If it does, we'll create a Change Set for that stack...)
 @[45](Otherwise we'll deploy it as a new stack entirely)
+
+---?code=Configs/Demo_VS_Config.psd1&lang=powershell&color=#282C34&title=The shared PSD1 config
+
+This is the configuration file containing the variable values for each environment.
 
 ---?code=StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 Bucket script
 

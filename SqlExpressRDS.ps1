@@ -1,8 +1,8 @@
 Param (
     [parameter(Mandatory = $false,Position = 0)]
-    [ValidateSet('dev','stg','prd')]
+    [ValidateSet('development','staging','production')]
     [String]
-    $Environment
+    $Environment = 'development'
 )
 
 Import-Module VaporShell
@@ -30,13 +30,18 @@ $newVaporResourceSplat = @{
 $customResource = New-VaporResource @newVaporResourceSplat
 
 $secretValue = Add-FnGetAtt $customResource 'Secret'
-$myPublicIp = (Invoke-RestMethod "http://ipinfo.io/json").IP
+$cidrIp = if ($Environment -eq 'development') {
+    "$((Invoke-RestMethod 'http://ipinfo.io/json').IP)/32"
+}
+else {
+    '10.0.0.0/8'
+}
 
 $ingressParams = @{
     IpProtocol = 'tcp'
     ToPort     = '1433'
     FromPort   = '1433'
-    CidrIp     = "$($myPublicIp)/32"
+    CidrIp     = $cidrIp
 }
 $securityGroupIngress = Add-VSEC2SecurityGroupIngress @ingressParams
 
@@ -53,7 +58,9 @@ $rdsParams = @{
     MasterUsername       = 'rdsmaster'
     MasterUserPassword   = $secretValue
     VPCSecurityGroups    = $groupId
-    PubliclyAccessible   = $true
+    PubliclyAccessible   = $(
+        if($Environment -eq 'development'){$true}else{$false}
+    )
     AllocatedStorage     = '25'
     EngineVersion        = "13.00.4451.0.v1"
     DBInstanceIdentifier = 'cf-sqlserver-ex-1'
@@ -72,18 +79,23 @@ $template.AddResource(
     $rdsInstance
 )
 
-$newVaporOutputSplat = @{
-    Value = $secretValue
-    LogicalId = 'RDSMasterPassword'
+if ($Environment -eq 'development') {
+    $outParams = @{
+        LogicalId = 'RDSMasterPassword'
+        Value = $secretValue
+    }
+    $pwOutput = New-VaporOutput @outParams
+    $template.AddOutput($pwOutput)
 }
-$pwOutput = New-VaporOutput @newVaporOutputSplat
-$template.AddOutput($pwOutput)
+
+$template.Validate()
+$template.ToYAML()
+Read-Host "`nPress [Enter] to create stack..."
 
 $newVSStackSplat = @{
     StackName    = "my-sql-express-stack"
     TemplateBody = $template
     ProfileName  = $Environment
     Verbose      = $true
-    WhatIf       = $true
 }
 New-VSStack @newVSStackSplat
