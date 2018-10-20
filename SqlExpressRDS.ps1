@@ -37,17 +37,17 @@ else {
     '10.0.0.0/8'
 }
 
-$ingressParams = @{
+$ingParams = @{
     IpProtocol = 'tcp'
     ToPort     = '1433'
     FromPort   = '1433'
     CidrIp     = $cidrIp
 }
-$securityGroupIngress = Add-VSEC2SecurityGroupIngress @ingressParams
+$securityGroupIngress = Add-VSEC2SecurityGroupIngress @ingParams
 
 $sgParams = @{
     LogicalId            = 'RDSSecurityGroup'
-    GroupDescription     = 'Port 1433 access to RDS from local only'
+    GroupDescription     = 'Port 1433 access to RDS'
     SecurityGroupIngress = $securityGroupIngress
 }
 $ec2SecurityGroup = New-VSEC2SecurityGroup @sgParams
