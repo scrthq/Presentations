@@ -1,5 +1,5 @@
 @{
-    Dev = @{
+    dev = @{
         # Let's keep the Dev autoscaling group smaller in size for cost
         AMI = "ami-f582959r"
         ASGDesired = "1"
@@ -23,7 +23,7 @@
         TemplateName = "Web-Tier-Core-DEV.yml"
         UserDataFile = "StdUserData.ps1"
     }
-    Stg = @{
+    stg = @{
         # Let's bump up the staging autoscaling group a bit to get us closer to production
         AMI = "ami-f582959r"
         ASGDesired = "2"
@@ -47,7 +47,7 @@
         TemplateName = "Web-Tier-Core-STG.yml"
         UserDataFile = "StdUserData.ps1"
     }
-    Prd = @{
+    prd = @{
         AMI = "ami-f582959r"
         ASGDesired = "4"
         ASGMax = "4"
