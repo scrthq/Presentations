@@ -191,7 +191,7 @@ This one is a _bit_ more complex due to how many additional resources are needed
 
 @ul
 - Requires an understanding of what is "standardized" in your environment
-- "Speed-to-market" can be slower as it takes more thought into designing reusable components than building directly
+- "Speed-to-market" can be slower as it takes more thought designing reusable components compared to building directly
 @ulend
 
 ---?color=#282C34
