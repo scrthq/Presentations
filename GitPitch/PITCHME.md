@@ -79,21 +79,17 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 
 ---?color=#282C34
 
-### Single Script Pros/Cons
+### Single Script - Pros
 
 @ul
-- Pros
-  - Quick to get going
-  - Easy to visually confirm everything being added to the stack
-  - Simple to manage with even large scripts
-- Cons
-  - Repetitive code with similar stack builds
-  - Copy/paste nightmares when small things change
+- Quick to get going
+- Easy to visually confirm everything being added to the stack
+- Simple to manage with even large scripts
 @ulend
 
 ---?color=#282C34
 
-### Single Script Cons
+### Single Script - Cons
 
 @ul
 - Repetitive code with similar stack builds
@@ -102,11 +98,11 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 
 ---?color=#282C34
 
-## So how do we approach this better?
+## So, how do we approach this _better_?
 
 ---?color=#282C34
 
-### Make modular, reusable scripts!
+### With modular, reusable scripts!
 
 <img src="https://static.dezeen.com/uploads/2016/06/move-wear-link-play-seymour-powell-modular-tech-design-product-concept-open-hardware-additional_dezeen_2.2.gif" width="400"/>
 
