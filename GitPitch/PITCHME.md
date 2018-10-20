@@ -3,7 +3,7 @@
 @snap[west]
 <h3>Building Dynamic CloudFormation Templates with <a href='https://vaporshell.io/'>VaporShell</a></h3>
 <hr>
-<h4>Nate Ferrell<br><i>Systems & DevOps Engineer</i><br>AWS Certified Associate (Sol. Architect, Developer, SysOps)</h4>
+<h4>Nate Ferrell<br><i>Systems & DevOps Engineer</i><br>AWS Certified Associate (<i>Solutions Architect, Developer, SysOps Administrator</i>)</h4>
 <h5>[@fa[pencil] ferrell.io](https://ferrell.io/)<br>[@fa[twitter] @scrthq](https://twitter.com/scrthq)<br>[@fa[github] @scrthq](https://github.com/scrthq)<br>[@fa[slack] @scrthq](http://slack.poshcode.org/)</h5>
 @snapend
 
