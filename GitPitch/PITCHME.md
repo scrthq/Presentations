@@ -176,6 +176,26 @@ This one is a _bit_ more complex due to how many additional resources are needed
 
 ---?color=#282C34
 
+
+### Modular Stack - Pros
+
+@ul
+- Enables repeatable, reliable infrastructure builds when working with semi-standard stacks
+- Shortens primary script down to just the connecting components
+- Shortened script also increases visibility towards the unique components of the target stack
+@ulend
+
+---?color=#282C34
+
+### Modular Stack - Cons
+
+@ul
+- Requires an understanding of what is "standardized" in your environment
+- "Speed-to-market" can be slower as it takes more thought into designing reusable components than building directly
+@ulend
+
+---?color=#282C34
+
 @snap[west]
 <h3>Thank you for your time!</h3>
 <hr>
