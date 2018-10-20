@@ -56,15 +56,15 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - Custom Resource to retrieve secrets from AWS Secrets Manager
 @ulend
 
----?code=StdSqlExpressRDS.ps1&lang=powershell&color=#282C34&title=The Single Script Stack
+---?code=SqlExpressRDS.ps1&lang=powershell&color=#282C34&title=The Single Script Stack
 
 @[1-6](Parameterize the script so we can set the environment we are deploying to)
-@[7](Import the VaporShell module)
-@[8-11](Initialize the template object with a useful description for the stack)
-@[13-28](Create the custom resource that will fetch the RDS Master Password from AWS Secrets Manager...)
-@[22](...using the `$Environment` parameter to set the SecretId)
-@[29](Store the call to `Fn::GetAtt` to avoid repetitive code)
-@[31-45](Create an ingress rule for the Security Group to allow access from the specified CIDR)
+@[8](Import the VaporShell module)
+@[10-13](Initialize the template object with a useful description for the stack)
+@[15-30](Create the custom resource that will fetch the RDS Master Password from AWS Secrets Manager...)
+@[26](...using the `$Environment` parameter to set the SecretId)
+@[32](Call `Fn::GetAtt` to retrieve the `Secret` attribute of the custom resource)
+@[33](Get our current public IP so we can create our ingress rule for SQL access)
 @[36-39](If we're in `dev`, allow access from our current public IP using a quick call to `ipinfo.io` 👍...)
 @[40-42](...otherwise, let's lock it down to our private VPC CIDR block)
 @[47-52](Create the Security Group and attach the ingress rule we just created...)
