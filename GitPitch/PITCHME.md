@@ -79,12 +79,16 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 
 ---?color=#282C34
 
-### Single Script Pros
+### Single Script Pros/Cons
 
 @ul
-- Quick to get going
-- Easy to visually confirm everything being added to the stack
-- Simple to manage with even large scripts
+- Pros
+  - Quick to get going
+  - Easy to visually confirm everything being added to the stack
+  - Simple to manage with even large scripts
+- Cons
+  - Repetitive code with similar stack builds
+  - Copy/paste nightmares when small things change
 @ulend
 
 ---?color=#282C34
