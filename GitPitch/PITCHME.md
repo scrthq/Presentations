@@ -40,14 +40,19 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 
 ### Single Script Approach
 
-The quick and easy way to get going with stack creation
+@ul
+- The quick and easy way to get going with stack creation
+- Everything going into the stack is on the same ps1 file
+- Perfect for unique deployment scenarios or quick stack creation
+  @ulend
 
 ---?color=#282C34
 
 ### Single Script Resources
 
 @ul
-- S3 Bucket
+- RDS Instance
+- Custom Resource to retrieve secrets from AWS Secrets Manager
 - S3 Bucket Policy
 - EC2 Role
 - Instance Profile
