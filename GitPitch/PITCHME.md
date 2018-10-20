@@ -52,14 +52,8 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 
 @ul
 - RDS Instance
+- Security group
 - Custom Resource to retrieve secrets from AWS Secrets Manager
-- S3 Bucket Policy
-- EC2 Role
-- Instance Profile
-- Launch Configuration
-- AutoScaling Group
-- Elastic Load Balancer
-- Custom Resource to add a CNAME to DNS for the ELB
 @ulend
 
 ---?code=StdSqlExpressRDS.ps1&lang=powershell&color=#282C34&title=The Single Script Stack
@@ -82,6 +76,35 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 @[86-93](DEMO ONLY! Don't ever output something sensitive like this in real life! ☠️)
 @[95-97](Cast the template to YAML, validate the template syntax using the AWS CloudFormation SDK then pause to inspect it in the console)
 @[99-105](Finally, deploy the template as a new CloudFormation stack!)
+
+---?color=#282C34
+
+### Single Script Pros
+
+@ul
+- Quick to get going
+- Easy to visually confirm everything being added to the stack
+- Simple to manage with even large scripts
+@ulend
+
+---?color=#282C34
+
+### Single Script Cons
+
+@ul
+- Repetitive code with similar stack builds
+- Copy/paste nightmares when small things change
+@ulend
+
+---?color=#282C34
+
+## So how do we approach this better?
+
+---?color=#282C34
+
+### Make modular, reusable scripts!
+
+<img src="https://static.dezeen.com/uploads/2016/06/move-wear-link-play-seymour-powell-modular-tech-design-product-concept-open-hardware-additional_dezeen_2.2.gif" width="400"/>
 
 ---?color=#282C34
 
