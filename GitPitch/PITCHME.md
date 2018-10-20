@@ -109,8 +109,6 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 
 ---?color=#282C34
 
----?color=#282C34
-
 ### The Modular Script Approach
 
 @ul
@@ -118,6 +116,8 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - Common resources and resource groups stored in standardized scripts
 - Perfect for resources that are standardized, i.e. web/API server stacks
 @ulend
+
+---?color=#282C34
 
 ### Modular Stack Resources
 
