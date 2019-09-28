@@ -15,19 +15,19 @@
 }
 
 .reveal .controls {
-    color: #899265;
+    color: #DCDFE4;
 }
 
 .reveal a {
-    color: #2ca0c4;
+    color: #61AFEF;
 }
 
 .reveal a:hover {
-    color: #899265;
+    color: #61AFEF;
 }
 
 .reveal a:visited {
-    color: #899265;
+    color: #61AFEF;
 }
 
 .reveal ul li {

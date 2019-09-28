@@ -65,7 +65,7 @@ Deploying to production? Let's add these as well:
 - SNS Topic to push the ASG events to SQS so that production monitoring can add or remove hosts as needed
 @ulend
 
----?code=../StdWebASGStack.ps1&lang=powershell&color=#282C34&title=The Stack
+---?code=VaporShell/DynamicTemplates/StdWebASGStack.ps1&lang=powershell&color=#282C34&title=The Stack
 
 @[1-10](Parameterize the script so we can set config file path and the environment we are deploying to)
 @[11](Import the VaporShell module)
