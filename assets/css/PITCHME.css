@@ -23,6 +23,9 @@
 .reveal .controls {
     color: #98C379;
 }
+.reveal.has-dark-background .controls {
+    color: #98C379;
+}
 
 .reveal a {
     color: #61AFEF;
