@@ -194,4 +194,4 @@ This one is a _bit_ more complex due to how many additional resources are needed
 - "Speed-to-market" can be slower as it takes more thought designing reusable components compared to building directly
 @ulend
 
----?include=common/closing.md&color=#282C34
+---?include=common/closing/PITCHME.md&color=#282C34
