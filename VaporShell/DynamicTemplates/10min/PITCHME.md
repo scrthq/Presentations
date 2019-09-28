@@ -89,7 +89,7 @@ Simple S3 bucket script without any bells or whistles. Usually all you'll need.
 
 ---?code=VaporShell/DynamicTemplates/StdResources/StdAutoScalingGroup.ps1&lang=powershell&color=#282C34&title=The AutoScalingGroup script
 
-This one is a _bit_ more complex due to how many additional resources are needed for a standard AutoScalingGroup.
+This one is a _bit_ more complex due to how many additional resources are needed.
 
 ---?color=#282C34
 
