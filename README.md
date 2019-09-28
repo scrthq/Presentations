@@ -1,10 +1,10 @@
-# Presentations by Nate Ferrell (SCRT HQ)
+# My Presentations
 
 Hello! Welcome to my Presentations super-repo. Check the links below to view the GitPitch slides for the desired presentation.
 
 If you have any questions, please don't hesitate to open an issue on this repository!
 
-## Presentation Links
+## Links
 
 ### Building Dynamic CloudFormation Templates with VaporShell
 
