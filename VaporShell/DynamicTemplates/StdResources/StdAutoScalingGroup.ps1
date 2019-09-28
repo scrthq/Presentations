@@ -156,6 +156,15 @@ if ($Global:VSConfig.Environment -eq 'prd') {
     } -Type "Custom::MonitoringHostTemplate"
 }
 
+$addVSElasticLoadBalancingLoadBalancerHealthCheckSplat = @{
+    HealthyThreshold = '2'
+    Interval = '12'
+    Timeout = '10'
+    Target = "HTTPS:443/healthcheck.htm"
+    UnhealthyThreshold = '2'
+}
+$healthCheck = Add-VSElasticLoadBalancingLoadBalancerHealthCheck @addVSElasticLoadBalancingLoadBalancerHealthCheckSplat
+
 $elbParams = @{
     LogicalId = "StdElasticLoadBalancer"
     ConnectionDrainingPolicy = (Add-VSElasticLoadBalancingLoadBalancerConnectionDrainingPolicy -Enabled:$true -Timeout 300)
@@ -163,7 +172,7 @@ $elbParams = @{
         Add-FnImportValue "subnet-web-front-end-us-west-2a"
         Add-FnImportValue "subnet-web-front-end-us-west-2b"
     )
-    HealthCheck = (Add-VSElasticLoadBalancingLoadBalancerHealthCheck -Target "HTTPS:443/healthcheck.htm" -HealthyThreshold '2' -UnhealthyThreshold '2' -Interval '12' -Timeout '10')
+    HealthCheck = $healthCheck
     Listeners = @(
         Add-VSElasticLoadBalancingLoadBalancerListeners -LoadBalancerPort '80' -InstancePort '80' -InstanceProtocol 'HTTP' -Protocol 'HTTP'
         Add-VSElasticLoadBalancingLoadBalancerListeners -LoadBalancerPort '443' -InstancePort '443' -InstanceProtocol 'TCP' -Protocol 'TCP'
