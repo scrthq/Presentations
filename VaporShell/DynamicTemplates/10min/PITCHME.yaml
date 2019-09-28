@@ -4,7 +4,6 @@ background-color: #282C34
 highlight: atom-one-dark
 code-line-numbers: true
 theme-override: assets/css/PITCHME.css
-theme-code: [ "Fira Code" ]
 layout: center
 mousewheel: false
 footnote: "<i><a href='https://github.com/scrthq/Presentations/tree/master/VaporShell/DynamicTemplates'>View this code on GitHub</a></i>"
