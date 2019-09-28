@@ -6,6 +6,10 @@
     text-align: center;
 }
 
+.reveal pre {
+    left: 30%;
+}
+
 .reveal pre code {
     font-size: 0.6em !important;
     max-height: 400px;
@@ -17,7 +21,7 @@
 }
 
 .reveal .controls {
-    color: #DCDFE4;
+    color: #98C379;
 }
 
 .reveal a {
