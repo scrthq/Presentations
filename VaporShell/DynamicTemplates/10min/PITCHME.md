@@ -83,11 +83,11 @@ Deploying to production? Let's add these as well:
 @[42](If it does, we'll create a Change Set for that stack...)
 @[45](Otherwise we'll deploy it as a new stack entirely)
 
----?code=StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 Bucket script
+---?code=VaporShell/DynamicTemplates/StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 Bucket script
 
 Simple S3 bucket script without any bells or whistles. Usually all you'll need.
 
----?code=StdResources/StdAutoScalingGroup.ps1&lang=powershell&color=#282C34&title=The AutoScalingGroup script
+---?code=VaporShell/DynamicTemplates/StdResources/StdAutoScalingGroup.ps1&lang=powershell&color=#282C34&title=The AutoScalingGroup script
 
 This one is a _bit_ more complex due to how many additional resources are needed for a standard AutoScalingGroup.
 

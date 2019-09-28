@@ -56,7 +56,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - Custom Resource to retrieve secrets from AWS Secrets Manager
 @ulend
 
----?code=SqlExpressRDS.ps1&lang=powershell&color=#282C34&title=The Single Script Stack
+---?code=VaporShell/DynamicTemplates/SqlExpressRDS.ps1&lang=powershell&color=#282C34&title=The Single Script Stack
 
 @[1-6](Parameterize the script so we can set the environment we are deploying to)
 @[8](Import the VaporShell module)
@@ -144,7 +144,7 @@ Deploying to production? Let's add these as well:
 - SNS Topic to push the ASG events to SQS so that production monitoring can add or remove hosts as needed
 @ulend
 
----?code=StdWebASGStack.ps1&lang=powershell&color=#282C34&title=The Standardized Stack
+---?code=VaporShell/DynamicTemplates/StdWebASGStack.ps1&lang=powershell&color=#282C34&title=The Standardized Stack
 
 @[1-10](Parameterize the script so we can set config file path and the environment we are deploying to)
 @[11](Import the VaporShell module)
@@ -162,15 +162,15 @@ Deploying to production? Let's add these as well:
 @[42](If it does, we'll create a Change Set for that stack...)
 @[45](Otherwise we'll deploy it as a new stack entirely)
 
----?code=Configs/Demo_VS_Config.psd1&lang=powershell&color=#282C34&title=The shared PSD1 config
+---?code=VaporShell/DynamicTemplates/Configs/Demo_VS_Config.psd1&lang=powershell&color=#282C34&title=The shared PSD1 config
 
 This is the configuration file containing the variable values for each environment.
 
----?code=StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 Bucket script
+---?code=VaporShell/DynamicTemplates/StdResources/StdS3Bucket.ps1&lang=powershell&color=#282C34&title=The S3 Bucket script
 
 Simple S3 bucket script without any bells or whistles. Usually all you'll need.
 
----?code=StdResources/StdAutoScalingGroup.ps1&lang=powershell&color=#282C34&title=The AutoScalingGroup script
+---?code=VaporShell/DynamicTemplates/StdResources/StdAutoScalingGroup.ps1&lang=powershell&color=#282C34&title=The AutoScalingGroup script
 
 This one is a _bit_ more complex due to how many additional resources are needed for a standard AutoScalingGroup.
 
