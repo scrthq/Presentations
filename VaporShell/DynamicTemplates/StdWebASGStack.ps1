@@ -1,12 +1,12 @@
 # Should be Dev, Stg or Prd per our config.psd1
 Param(
     [parameter(Mandatory = $false)]
-    [ValidateScript({Test-Path $_})]
+    [ValidateScript( { Test-Path $_ })]
     [String]
-    $ConfigPath="$PSScriptRoot\Configs\Demo_VS_Config.psd1",
+    $ConfigPath = "$PSScriptRoot\Configs\Demo_VS_Config.psd1",
     [parameter(Mandatory = $false)]
     [String]
-    $ConfigKey='dev'
+    $ConfigKey = 'dev'
 )
 Import-Module VaporShell -MinimumVersion 2.5.5
 
@@ -14,7 +14,7 @@ $conf = Import-VSTemplateConfig -Path $ConfigPath -Key $ConfigKey
 
 $global:template = Initialize-Vaporshell -Description $conf.Description
 
-$stackTags = $conf.Tags.Keys | ForEach-Object{
+$stackTags = $conf.Tags.Keys | ForEach-Object {
     Add-VSTag -Key $_ -Value $conf.Tags[$_]
 }
 
@@ -25,7 +25,7 @@ ForEach-Object {
 
 $userData = Add-UserData -File "$PSScriptRoot\UserData\$($conf.UserDataFile)" -UseJoin -Replace @{
     '#{stackname}' = $conf.StackName
-    '#{region}' = $conf.AvailabilityZones[0] -replace ".$"
+    '#{region}'    = $conf.AvailabilityZones[0] -replace ".$"
 }
 
 . "$PSScriptRoot\StdResources\StdAutoScalingGroup.ps1" -Tags $stackTags -BucketName $conf.S3BucketName -UserData $userData |
@@ -39,7 +39,13 @@ try {
     $global:template.Validate($conf.Environment)
     try {
         Get-VSStack -StackId $conf.StackName -ProfileName $conf.Environment -ErrorAction Stop
-        New-VSChangeSet -TemplateBody $template -StackName $conf.StackName -ChangeSetName "$($conf.StackName)_$(Get-Date -Format "yyyy_MM_dd")" -ProfileName $conf.Environment -WhatIf
+        $newVSChangeSetSplat = @{
+            StackName     = $conf.StackName
+            ProfileName   = $conf.Environment
+            ChangeSetName = "$($conf.StackName)_$(Get-Date -Format "yyyy_MM_dd")"
+            TemplateBody  = $template
+        }
+        New-VSChangeSet @newVSChangeSetSplat
     }
     catch {
         New-VSStack -TemplateBody $template -StackName $conf.StackName -ProfileName $conf.Environment -WhatIf
