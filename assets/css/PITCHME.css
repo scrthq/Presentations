@@ -1,5 +1,5 @@
-.reveal .slide-background {
-    background-color: #282C34;
+.text-code {
+    color: #98C379 !important;
 }
 
 .centered {
@@ -13,23 +13,29 @@
 
 .reveal pre code {
     font-size: 0.6em;
-    max-height: 400px;
+    max-height: 400px !important;
     line-height: normal;
+    overflow: auto;
 }
 
-.reveal .controls {
-    color: #61AFEF;
-}
-.reveal.has-dark-background .controls {
-    color: #61AFEF;
+/* width */
+::-webkit-scrollbar {
+    width: 3px;
 }
 
-.reveal a {
-    color: #61AFEF;
+/* Track */
+::-webkit-scrollbar-track {
+    background: #282C34;
 }
 
-.reveal a:hover {
-    color: #98C379;
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(79, 87, 102);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(109, 119, 139);
 }
 
 .reveal ul li {
@@ -106,9 +112,4 @@ div.activity-details {
 .reveal table th,
 .reveal table td {
     padding: 1em 0.5em 1em 0.5em;
-}
-
-.footnote {
-    color: gray;
-    font-size: 0.5em !important;
 }

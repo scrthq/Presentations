@@ -1,5 +1,3 @@
----?color=#282C34
-
 @snap[west]
 <h3>Building Dynamic CloudFormation Templates with <a href='https://vaporshell.io/'>VaporShell</a></h3>
 <hr>
@@ -7,7 +5,7 @@
 <h5>[@fa[pencil] ferrell.io](https://ferrell.io/)<br>[@fa[github] @scrthq](https://github.com/scrthq)<br>[@fa[twitter] @scrthq](https://twitter.com/scrthq)<br>[@fa[slack] @scrthq](https://aka.ms/PSSlack)</h5>
 @snapend
 
----?color=#282C34
+---
 
 ### _What_ is VaporShell?
 
@@ -15,13 +13,13 @@ VaporShell is a PowerShell module designed to abstract AWS CloudFormation templa
 
 📦
 
----?color=#282C34
+---
 
 ### _Why_ VaporShell?
 
 <img src="https://i.kym-cdn.com/entries/icons/facebook/000/022/978/yNlQWRM.jpg" width="400"/>
 
----?color=#282C34
+---
 
 ### _Why_ VaporShell?
 
@@ -36,7 +34,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - No longer having to work with JSON or YAML 😃
 @ulend
 
----?color=#282C34
+---
 
 ### What are we building today?
 
@@ -53,7 +51,7 @@ We'll be building a CloudFormation stack containing the following resources:
 - Custom Resource to add a CNAME to DNS for the ELB
 @ulend
 
----?color=#282C34
+---
 
 ### Anything else?
 
@@ -65,15 +63,15 @@ Deploying to production? Let's add these as well:
 - SNS Topic to push the ASG events to SQS so that production monitoring can add or remove hosts as needed
 @ulend
 
----?color=#282C34
+---
 
 The Stack
 
-@code[powershell code-wrap](VaporShell/DynamicTemplates/StdWebASGStack.ps1)
+@code[powershell code-blend code-wrap](VaporShell/DynamicTemplates/StdWebASGStack.ps1)
 
 @[1-10](Parameterize the script so we can set config file path and the environment we are deploying to)
 @[11](Import the VaporShell module)
-@[13](Import the config at path with specified key. This also automatically sets the `$global:VSConfig` variable so it's accessible from other scripts in the same session)
+@[13](Import the config at path with specified key. This also automatically sets the `$global:VSConfig` variable so it's accessible from other scripts)
 @[15](Initialize a template object at the global scope so it's also accessible from other scripts)
 @[17-19](Compile the tags from the config into an array of CloudFormation-formatted Tags)
 @[21-24](Add an S3 bucket for the front-end hosts to access resources from using a standard script)
@@ -87,7 +85,7 @@ The Stack
 @[42-48](If it does, we'll create a Change Set for that stack...)
 @[51](Otherwise we'll deploy it as a new stack entirely)
 
----?color=#282C34
+---
 
 The S3 Bucket script
 
@@ -95,7 +93,7 @@ The S3 Bucket script
 
 Simple S3 bucket script without any bells or whistles. Usually all you'll need.
 
----?color=#282C34
+---
 
 The AutoScaling Group Script
 
@@ -103,7 +101,7 @@ The AutoScaling Group Script
 
 This one is a _bit_ more complex due to how many additional resources are needed.
 
----?color=#282C34
+---
 
 @snap[west]
 <h3>Thank you for your time!</h3>

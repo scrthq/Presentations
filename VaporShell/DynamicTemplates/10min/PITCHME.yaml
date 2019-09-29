@@ -1,6 +1,13 @@
 title: Building Dynamic CloudFormation Templates with VaporShell (Lightning)
-theme: night
-background-color: #282C34
+theme: template
+theme-background: ["#282C34"]
+theme-headline: ["Montserrat", "#fff", "none" ]
+theme-byline: ["Raleway", "#fff", "none" ]
+theme-text: ["Ubuntu", "#fff", "none" ]
+theme-links: ["#61AFEF", "#98C379"]
+theme-code: ["Fira Code"]
+theme-controls: ["#fff"]
+theme-margins: ["0", "15px"]
 highlight: atom-one-dark
 code-line-numbers: true
 theme-override: assets/css/PITCHME.css

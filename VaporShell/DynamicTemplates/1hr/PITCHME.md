@@ -1,5 +1,3 @@
----?color=#282C34
-
 @snap[west]
 <h3>Building Dynamic CloudFormation Templates with <a href='https://vaporshell.io/'>VaporShell</a></h3>
 <hr>
@@ -7,7 +5,7 @@
 <h5>[@fa[pencil] ferrell.io](https://ferrell.io/)<br>[@fa[github] @scrthq](https://github.com/scrthq)<br>[@fa[twitter] @scrthq](https://twitter.com/scrthq)<br>[@fa[slack] @scrthq](https://aka.ms/PSSlack)</h5>
 @snapend
 
----?color=#282C34
+---
 
 ### _What_ is VaporShell?
 
@@ -15,13 +13,13 @@ VaporShell is a PowerShell module designed to abstract AWS CloudFormation templa
 
 📦
 
----?color=#282C34
+---
 
 ### _Why_ VaporShell?
 
 <img src="https://i.kym-cdn.com/entries/icons/facebook/000/022/978/yNlQWRM.jpg" width="400"/>
 
----?color=#282C34
+---
 
 ### _Why_ VaporShell?
 
@@ -36,7 +34,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - No longer having to work with JSON or YAML 😃
 @ulend
 
----?color=#282C34
+---
 
 ### The Single Script Approach
 
@@ -46,7 +44,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - Perfect for unique deployment scenarios or quick stack creation
   @ulend
 
----?color=#282C34
+---
 
 ### Single Script Resources
 
@@ -78,7 +76,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 @[91-93](Validate the template syntax using the AWS CloudFormation SDK, cast the template to YAML, then pause to inspect it in the console)
 @[95-102](Finally, deploy the template as a new CloudFormation stack!)
 
----?color=#282C34
+---
 
 ### Single Script - Pros
 
@@ -88,7 +86,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - Simple to manage with even large scripts
 @ulend
 
----?color=#282C34
+---
 
 ### Single Script - Cons
 
@@ -97,17 +95,17 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - Copy/paste nightmares when small things change
 @ulend
 
----?color=#282C34
+---
 
 ## So, how do we approach this _better_?
 
----?color=#282C34
+---
 
 ### With modular, reusable scripts!
 
 <img src="https://static.dezeen.com/uploads/2016/06/move-wear-link-play-seymour-powell-modular-tech-design-product-concept-open-hardware-additional_dezeen_2.2.gif" width="400"/>
 
----?color=#282C34
+---
 
 ### The Modular Script Approach
 
@@ -117,7 +115,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - Perfect for resources that are standardized, i.e. web/API server stacks
 @ulend
 
----?color=#282C34
+---
 
 ### Modular Stack Resources
 
@@ -132,7 +130,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - Custom Resource to add a CNAME to DNS for the ELB
 @ulend
 
----?color=#282C34
+---
 
 ### Anything else?
 
@@ -174,7 +172,7 @@ Simple S3 bucket script without any bells or whistles. Usually all you'll need.
 
 This one is a _bit_ more complex due to how many additional resources are needed.
 
----?color=#282C34
+---
 
 
 ### Modular Stack - Pros
@@ -185,7 +183,7 @@ This one is a _bit_ more complex due to how many additional resources are needed
 - Shortened script also increases visibility towards the unique components of the target stack
 @ulend
 
----?color=#282C34
+---
 
 ### Modular Stack - Cons
 
@@ -194,7 +192,7 @@ This one is a _bit_ more complex due to how many additional resources are needed
 - "Speed-to-market" can be slower as it takes more thought designing reusable components compared to building directly
 @ulend
 
----?color=#282C34
+---
 
 @snap[west]
 <h3>Thank you for your time!</h3>
