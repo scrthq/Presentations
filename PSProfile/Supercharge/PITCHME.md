@@ -12,36 +12,110 @@
 During this session, we'll cover...
 
 @ul
-- 🤔 What is PSProfile?
+- 🤔 What PSProfile is
 - 💪 Goals of the module
 - 🚀 Getting started with the Configuration Helper
-- ✨ Converting existing profile scripts
-- ⚡ Using PSProfile's Power Tools to work FAST
+- ✨ Converting existing `$profile` scripts
+- ⚡ Using Power Tools to work FAST
 - 🔌 Extending PSProfile with custom plugins
 @ulend
 
 ---
 
-### What is PSProfile?
+### 🤔 What is PSProfile?
 
-PSProfile is a module designed to...
+PSProfile is a module enabling easy PowerShell @css[text-code](`$profile`) management. It is built to be a single-pane-of-glass to your full @css[text-code](`$profile`) as well as providing some productivity boosting features.
 
 ---
 
-#### Minimize actual profile content, making set up on a new machine quick.
+### 💪Goals of the module
 
-@snap[text-08]
-Profile contents can be reduced down to one line:<br/>@css[text-code](`Import-Module PSProfile`)
+PSProfile is designed to...
+
+---
+
+#### Minimize actual @css[text-code](`$profile`) contents...
+
+@snap[text-07]
+Your @css[text-code](`$profile`) can be reduced down to one line:<br/>@css[text-code](`Import-Module PSProfile`)
 @snapend
 
 ---
 
-Be a single point of profile configuration
+#### Enable managing your @css[text-code](`$profile`) from a single location...
+
+@snap[text-08]
+Everything is stored on a single configuration file!
+@snapend
+
+---
+
+#### Be portable...
+@snap[text-08]
+With `Export-PSProfileConfiguration` and `Export-PSProfileConfiguration`, migrating your `$profile` from one machine to the next is a breeze.
+@snapend
+
+---
+
+#### Be extensible...
+
+@snap[text-08]
+PSProfile includes support for custom plugins. Plugins can be designed as a simple script or a full module and installed from the PowerShell Gallery or local file path.
+@snapend
+
+---
+
+#### Provide quality-of-life improvements
+
+@snap[text-07]
+PSProfile includes a number of functions built with PowerShell development in mind:
+@ul
+- Project folder aliasing and argument completion
+    - Quickly move between your Git repo folders by name with Git project tab-completion
+- `Open-Code`
+    - Designed to wrap the `code` CLI and provide additional functionality.
+- `Start-BuildScript` (a.k.a. `bld`)
+    - Easily launch a `build.ps1` script from anywhere in a sub-process.
+- `Enter-CleanEnvironment` (a.k.a. `cln`)
+    - Opens a clean child process with `-NoProfile` and some `PSReadline` settings added for convenience.
+@ulend
+@snapend
+
+---
+
+### Getting Started with
+
+#### `Start-PSProfileConfigurationHelper`
+
+![Start-PSProfileConfigurationHelper](assets/img/Start-PSProfileConfigurationHelper.png)
+
+---
+
+`Code time!`
+
+---
+
+### Converting existing `$profile` scripts
 
 
-- Be portable
-- Be extensible
-- Provide quality-of-life improvements overall
+```powershell
+Get-Help Stuff
+Do-Stuff
+```
+
+---
+
+### Conclusion
+
+During this session, we covered...
+
+@ul
+- 🤔 What PSProfile is
+- 💪 Goals of the module
+- 🚀 Getting started with the Configuration Helper
+- ✨ Converting existing `$profile` scripts
+- ⚡ Using Power Tools to work FAST
+- 🔌 Extending PSProfile with custom plugins
 @ulend
 
 ---

@@ -1,4 +1,4 @@
-.text-code {
+.reveal div code {
     color: #98C379 !important;
 }
 
@@ -6,16 +6,17 @@
     text-align: center;
 }
 
-.reveal pre {
-    left: -10%;
-    width: 120%;
-}
-
 .reveal pre code {
+    color: #FFF !important;
     font-size: 0.6em;
     max-height: 400px !important;
     line-height: normal;
     overflow: auto;
+}
+
+::selection {
+    color: inherit;
+    background: rgba(79, 87, 102, 0.99)
 }
 
 /* width */
