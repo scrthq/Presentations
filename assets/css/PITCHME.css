@@ -8,16 +8,13 @@
 
 .reveal pre {
     left: -10%;
+    width: 120%;
 }
 
 .reveal pre code {
-    font-size: 0.6em !important;
+    font-size: 0.6em;
     max-height: 400px;
     line-height: normal;
-}
-
-.reveal pre {
-    width: 120% !important;
 }
 
 .reveal .controls {
