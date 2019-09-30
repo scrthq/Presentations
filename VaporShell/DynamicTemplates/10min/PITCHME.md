@@ -25,6 +25,7 @@ VaporShell is a PowerShell module designed to abstract AWS CloudFormation templa
 
 VaporShell offers a number of benefits over creating templates in JSON or YAML, including...
 
+@snap[text-08]
 @ul
 - Parameter validation and intellisense/tab completion ✔
 - Familiar PowerShell syntax 🤔
@@ -33,6 +34,7 @@ VaporShell offers a number of benefits over creating templates in JSON or YAML, 
 - Native shared configuration support 🤝
 - No longer having to work with JSON or YAML 😃
 @ulend
+@snapend
 
 ---
 
@@ -89,7 +91,7 @@ The Stack
 
 The S3 Bucket script
 
-@code[powershell code-wrap](VaporShell/DynamicTemplates/StdResources/StdS3Bucket.ps1)
+@code[powershell code-noblend code-wrap](VaporShell/DynamicTemplates/StdResources/StdS3Bucket.ps1)
 
 Simple S3 bucket script without any bells or whistles. Usually all you'll need.
 
@@ -97,7 +99,7 @@ Simple S3 bucket script without any bells or whistles. Usually all you'll need.
 
 The AutoScaling Group Script
 
-@code[powershell code-wrap](VaporShell/DynamicTemplates/StdResources/StdAutoScalingGroup.ps1)
+@code[powershell code-noblend code-wrap](VaporShell/DynamicTemplates/StdResources/StdAutoScalingGroup.ps1)
 
 This one is a _bit_ more complex due to how many additional resources are needed.
 

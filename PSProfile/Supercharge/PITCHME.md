@@ -15,7 +15,7 @@ During this session, we'll cover...
 - 🤔 What PSProfile is
 - 💪 Goals of the module
 - 🚀 Getting started with the Configuration Helper
-- ✨ Converting existing `$profile` scripts
+- ✨ Converting existing `$profile` content
 - ⚡ Using Power Tools to work FAST
 - 🔌 Extending PSProfile with custom plugins
 @ulend
@@ -95,13 +95,11 @@ PSProfile includes a number of functions built with PowerShell development in mi
 
 ---
 
-### Converting existing `$profile` scripts
+### Converting existing `$profile` content
 
+---
 
-```powershell
-Get-Help Stuff
-Do-Stuff
-```
+`Code time!`
 
 ---
 
@@ -113,7 +111,7 @@ During this session, we covered...
 - 🤔 What PSProfile is
 - 💪 Goals of the module
 - 🚀 Getting started with the Configuration Helper
-- ✨ Converting existing `$profile` scripts
+- ✨ Converting existing `$profile` content
 - ⚡ Using Power Tools to work FAST
 - 🔌 Extending PSProfile with custom plugins
 @ulend

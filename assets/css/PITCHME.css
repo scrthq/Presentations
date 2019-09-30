@@ -1,9 +1,18 @@
-.reveal div code {
-    color: #98C379 !important;
+/* Custom CSS classes */
+.wide-code pre {
+    left: -10%;
+    width: 120%;
 }
-
+.narrow-code pre {
+    left: 10%;
+    width: 80%;
+}
 .centered {
     text-align: center;
+}
+
+.reveal div code {
+    color: #98C379 !important;
 }
 
 .reveal pre code {
