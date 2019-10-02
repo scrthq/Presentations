@@ -83,7 +83,29 @@ PSProfile includes a number of functions built with PowerShell development in mi
 
 ---
 
-### Getting Started with
+### Getting Started
+
+---
+
+#### Available Help
+
+---
+
+@snap[north-west span-50]
+✔️ Comment-based help on all functions
+@snapend
+@snap[north-east span-50]
+![Get-Help Get-Definition -Full](assets/img/Get-Help_Get-Definition.png)
+@snapend
+
+@snap[west span-50]
+✔️ HelpFiles for each PSProfile Concept
+@snapend
+@snap[east span-50]
+![Get-Help about_PSProfile*](assets/img/ConceptualHelpFiles.png)
+@snapend
+
+---
 
 #### `Start-PSProfileConfigurationHelper`
 
@@ -103,6 +125,10 @@ PSProfile includes a number of functions built with PowerShell development in mi
 
 ---
 
+### Using
+
+---
+
 ### Conclusion
 
 During this session, we covered...
@@ -110,7 +136,7 @@ During this session, we covered...
 @ul
 - 🤔 What PSProfile is
 - 💪 Goals of the module
-- 🚀 Getting started with the Configuration Helper
+- 🚀 Getting started
 - ✨ Converting existing `$profile` content
 - ⚡ Using Power Tools to work FAST
 - 🔌 Extending PSProfile with custom plugins
