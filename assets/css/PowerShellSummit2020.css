@@ -1,0 +1,125 @@
+/* Custom CSS classes */
+.wide-code pre {
+    left: -10%;
+    width: 120%;
+}
+.narrow-code pre {
+    left: 10%;
+    width: 80%;
+}
+.centered {
+    text-align: center;
+}
+
+.reveal div code {
+    color: #98C379 !important;
+}
+
+.reveal pre code {
+    color: #FFF !important;
+    font-size: 0.6em;
+    max-height: 400px !important;
+    line-height: normal;
+    overflow: auto;
+}
+
+::selection {
+    color: inherit;
+    background: rgba(79, 87, 102, 0.99)
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #282C34;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgb(79, 87, 102);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(109, 119, 139);
+}
+
+.reveal ul li {
+    margin: 0 0 8px 0;
+}
+
+.reveal li {
+    font-size: .9em;
+}
+
+.reveal h3 {
+    font-size: 1.45em;
+}
+
+.reveal h6 {
+    font-size: 0.25em;
+}
+
+.reveal blockquote {
+    width: 95%;
+}
+
+.reveal section img {
+    border: 0;
+    box-shadow: none;
+}
+
+.reveal ol {
+    list-style-position: inside;
+}
+
+.reveal ol li {
+    margin: 0 0 20px 0 !important;
+}
+
+.reveal ul {
+    list-style-type: square;
+    list-style-position: inside !important;
+}
+
+.reveal ul li {
+    margin: 0 0 10px 0;
+}
+
+.reveal ul.shrink-items li {
+    margin: 0 0 10px 0;
+    font-size: 0.85em;
+}
+
+.reveal ul.many-items li {
+    margin: 0 0 8px 0;
+    font-size: 0.6em;
+}
+
+.reveal ul.long-items li {
+    font-size: 0.75em;
+    margin: 0 0 30px 0;
+}
+
+.reveal ul.image-credit-items li {
+    margin: 0 0 8px 0;
+    font-size: 0.4em;
+}
+
+div.activity-details {
+    font-size: 0.9em;
+    margin-bottom: 30px;
+}
+
+.reveal table {
+    font-size: 0.75em;
+}
+
+.reveal table th,
+.reveal table td {
+    padding: 1em 0.5em 1em 0.5em;
+}

@@ -30,7 +30,11 @@ function Start-GitPitchDesktop {
             until ($i -ge 300 -or ($null -ne $dockerStarted -and $dockerStarted -notmatch 'errors pretty printing info'))
             Write-Host ""
         }
-        Write-Host -ForegroundColor Green "Confirmed Docker daemon is available, running container"
+        if ($null -eq (docker image ls | Where-Object {$_ -match 'gitpitch'})) {
+            Write-Host -ForegroundColor Green "Pulling latest GitPitch Pro image"
+            docker pull gitpitch/desktop:pro
+        }
+        Write-Host -ForegroundColor Green "Confirmed Docker daemon is available and latest GitPitch Pro image is pulled, running container"
         $url = 'http://localhost'
         $url += if ($Port -ne 80) {
             ":$Port/"

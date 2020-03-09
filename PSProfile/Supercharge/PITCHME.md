@@ -92,28 +92,45 @@ PSProfile includes a number of functions built with PowerShell development in mi
 ---
 
 @snap[north-west span-50]
-✔️ Comment-based help on all functions
+✔️ Wiki on the GitHub Repository
 @snapend
-@snap[north-east span-50]
-![Get-Help Get-Definition -Full](assets/img/Get-Help_Get-Definition.png)
+@snap[north-east span-40 fragment]
+![PSProfile Wiki](assets/img/WikiHelp.png)
 @snapend
 
-@snap[west span-50]
+@snap[west span-50 fragment]
 ✔️ HelpFiles for each PSProfile Concept
 @snapend
-@snap[east span-50]
+@snap[east span-50 fragment]
 ![Get-Help about_PSProfile*](assets/img/ConceptualHelpFiles.png)
+@snapend
+
+@snap[south-west span-50 fragment]
+✔️ Comment-based help on all functions
+@snapend
+@snap[south-east span-40 fragment]
+![Get-Help Get-Definition -Full](assets/img/Get-Help_Get-Definition.png)
 @snapend
 
 ---
 
-#### `Start-PSProfileConfigurationHelper`
+#### The Configuration Helper
 
 ![Start-PSProfileConfigurationHelper](assets/img/Start-PSProfileConfigurationHelper.png)
 
 ---
 
-`Code time!`
+PSProfile includes a Configuration Helper function to assist with getting started quickly:
+
+@css[fragment](`Start-PSProfileConfigurationHelper`)
+
+@css[fragment](Walking through the Configuration Helper during your first time using PSProfile is recommended, as it explains what each concept is about and provides the opportunity to add some base configurations.)
+
+---
+
+Let's step through the Configuration Helper...
+
+@css[fragment](`Code time!`)
 
 ---
 
@@ -121,11 +138,100 @@ PSProfile includes a number of functions built with PowerShell development in mi
 
 ---
 
-`Code time!`
+PSProfile supports a wide range of common `$profile` items:
+
+@ul
+- Module importing
+- Invoking external script files
+- Command alias setting
+- Custom prompt loading
+- Environment and Global variable setting
+@ulend
 
 ---
 
-### Using
+PSProfile also includes some bonus features that help with ensuring that your machine is configured the way you want:
+
+@ul
+- Missing module installation
+- Symbolic Link creation
+- Prompt management
+@ulend
+
+---
+
+Let's walk through some existing `$profile` items and how you can add them to your PSProfile...
+
+@css[fragment](`Code time!`)
+
+---
+
+### Using Power Tools to work FAST
+
+PSProfile comes with a number of functions that are focused entirely on improving productivity and overall quality of life when working in the console...
+
+---
+
+@snap[north-west]
+-  1/2
+@snapend
+
+@ul
+- `Confirm-ScriptIsValid`
+- `Enter-CleanEnvironment`
+- `Format-Syntax`
+- `Get-Definition`
+- `Get-Gist`
+- `Get-LongPath`
+- `Install-LatestModule`
+@ulend
+
+---
+
+@snap[north-west]
+-  2/2
+@snapend
+
+@ul
+- `Open-Code`
+- `Open-Item`
+- `Pop-Path`
+- `Push-Path`
+- `Start-BuildScript`
+- `Test-RegEx`
+@ulend
+
+---
+
+Most of the Power Tool functions greatly benefit from having at least one `Project Path` in your PSProfile configuration.
+
+A `Project Path` is simply a path to a folder where you have Git Repos underneath, e.g. `E:\Git`, in my case. When refreshing PSProfile, these paths are searched for the following items to store in your configuration:
+
+@ul
+- Git repo folders (by the presence of the `.git` directory)
+- PowerShell `build.ps1` scripts
+@ulend
+
+---
+
+### Extending PSProfile with custom plugins
+
+---
+
+#### PSProfile is built to be extensible.
+
+It ships with a couple helpful plugins included that demonstrate some of the options that you have when writing your own:
+
+@ul
+- `PSProfile.ADCompleters`
+- `PSProfile.GitAliases`
+@ulend
+
+---
+
+#### PSProfile.GitAliases Usage
+
+@code[powershell code-wrap](PSProfile/Scripts/GitAliases.ps1)
 
 ---
 

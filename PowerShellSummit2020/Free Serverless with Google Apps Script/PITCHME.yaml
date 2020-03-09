@@ -1,0 +1,16 @@
+title: Building Dynamic CloudFormation Templates with VaporShell
+theme: template
+theme-background: ["#282C34"]
+theme-headline: ["Montserrat", "#fff", "none" ]
+theme-byline: ["Raleway", "#fff", "none" ]
+theme-text: ["Ubuntu", "#fff", "none" ]
+theme-links: ["#61AFEF", "#98C379"]
+theme-code: ["Fira Code"]
+theme-controls: ["#fff"]
+theme-margins: ["0", "15px"]
+highlight: atom-one-dark
+code-line-numbers: true
+theme-override: assets/css/PowerShellSummit2020.css
+layout: center
+mousewheel: false
+footnote: "<i><a href='https://github.com/scrthq/Presentations/tree/master/VaporShell/DynamicTemplates'>View this code on GitHub</a></i>"
